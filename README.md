@@ -11,8 +11,8 @@ This is the Lightwand Texas Edition project, a light painting project that makes
 
 The following folders contain all the necessary things:
 	
-  -CCS project: Contains the software code to be uploaded to the board
-  -Eagle project: Contains the hardware design 
-  -FreeCAD design: Contains the 3D design of the box to cover the hardware
-  -Sketchup design: Contains the ·D design of the hardware
-  -Lightwand Texas Edition English Guide: The manual to be used to know about the different HW parts, soldering steps, creating PNM images and how to navigate through the different menus 
+	-CCS project: Contains the software code to be uploaded to the board
+	-Eagle project: Contains the hardware design
+	-FreeCAD design: Contains the 3D design of the box to cover the hardware
+	-Sketchup design: Contains the ·D design of the hardware
+	-Lightwand Texas Edition English Guide: The manual to be used to know about the different HW parts, soldering steps, creating PNM images and how to navigate through the different menus 
