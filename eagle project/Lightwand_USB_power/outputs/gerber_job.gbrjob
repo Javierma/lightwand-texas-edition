@@ -1,0 +1,13 @@
+G04 Gerber job file.*
+%TF.FileFunction,JobInfo*%
+%TF.GenerationSoftware,Autodesk,EAGLE,8.7.0*%
+%TF.CreationDate,2018-04-01T16:58:45Z*%
+%TF.Part,Single*%
+%MOMM*%
+%TJ.B_Owner,Javier Martinez <javote87@gmail.com>*%
+%TJ.B_ID,LightWand_USB_power*%
+%TJ.B_LayerNum,2*%
+%TJ.B_Thickness,1.570000*%
+%TJ.B_Size_X,99.542600*%
+%TJ.B_Size_Y,82.448400*%
+M02*
