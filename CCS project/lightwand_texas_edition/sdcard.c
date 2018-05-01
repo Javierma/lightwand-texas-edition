@@ -368,6 +368,7 @@ void read_first_sector(enum SSI SSI_number)
 	{
 		screen_write("FS is not FAT32",ALIGN_CENTRE_CENTRE/*,SSI0*/);
 		SysTick_Wait50ms(2000);
+		exit(1);
 	}
 
 }

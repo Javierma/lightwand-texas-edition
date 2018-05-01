@@ -54,10 +54,10 @@ int bright=5,delay=5,current_position=1;
 int main(void)
 {
 	SysTick_Init();
-	//init_buzzer(16000, 0);
+	init_buzzer(5000,0);
 	init_1wire_pin();
 	startSSI0();
-	initialize_screen(BACKLIGHT_ON/*,SSI0*/);
+	initialize_screen(BACKLIGHT_ON);
 	clear_screen();
 	/*screen_write("Testing\ncolors...",ALIGN_CENTRE_CENTRE,SSI0);*/
 	//test_colors();
@@ -73,13 +73,13 @@ int main(void)
 	if(reserved_sectors==1)
 	{
 		//Message to be shown if not FAT32 (single format)
-		screen_write("Invalid\nSD card\nformat",ALIGN_CENTRE_CENTRE/*,SSI0*/);
+		screen_write("Invalid\nSD card\nformat",ALIGN_CENTRE_CENTRE);
 	}
 	else
 	{
 
 		long next_cluster=get_root_dir_first_cluster();
-		screen_write("Initialising...",ALIGN_CENTRE_CENTRE/*,SSI0*/);
+		screen_write("Initialising...",ALIGN_CENTRE_CENTRE);
 		do
 		{
 			next_cluster=list_dirs_and_files(next_cluster,SHORT_NAME,GET_SUBDIRS,SD_SSI3);
@@ -89,7 +89,7 @@ int main(void)
 		set_init_menu();
 		initialize_buttons();
 		current_position=2;
-		show_menu(2/*,SSI0*/);
+		show_menu(2);
 		while(1)
 		{
 			char keep_going=0;
@@ -152,7 +152,7 @@ int main(void)
 							break;
 						}
 					}
-					show_menu(current_position/*,SSI0*/);
+					show_menu(current_position);
 				}
 			}
 			clear_screen();
@@ -164,14 +164,14 @@ int main(void)
 				//send_files_info();
 				clear_screen();
 				set_main_picture_menu();
-				show_menu(1/*,SSI0*/);
+				show_menu(1);
 				current_position=1;
 				manage_picture_menu();
 			}
 			else
 			{
 				set_paint_menu();
-				show_menu(1/*,SSI0*/);
+				show_menu(1);
 				current_position=1;
 				manage_paint_menu();
 			}
@@ -206,7 +206,7 @@ void send_files_info()
 
 void ask_for_bluetooth()
 {
-	screen_write("Set the\nsettings\nthrough\nBluetooh?",ALIGN_CENTRE_CENTRE/*,SSI0*/);
+	screen_write("Set the\nsettings\nthrough\nBluetooh?",ALIGN_CENTRE_CENTRE);
 	bright=(int) UART_InChar();
 	delay=(int) UART_InChar();
 	UART_OutChar('1');
@@ -386,13 +386,12 @@ void init_buzzer(uint16_t period, uint16_t high)
 	GPIO_PORTB_DEN_R |= 0x40;
 
 	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xF0FFFFFF)+0x07000000;
-	TIMER0_CTL_R &=~TIMER_CTL_TAEN; //disable timer0A during setup
-	TIMER0_CFG_R = 0x00000004;// configure for 16-bit timer mode
+	TIMER0_CTL_R &= ~TIMER_CTL_TAEN; //disable timer0A during setup
+	TIMER0_CFG_R = TIMER_CFG_16_BIT;// configure for 16-bit timer mode
 	                                   // configure for alternate (PWM) mode
-	TIMER0_TAMR_R = (0x00000008|0x00000002);
+	TIMER0_TAMR_R = (TIMER_TAMR_TAAMS|TIMER_TAMR_TAMR_PERIOD);
 	TIMER0_TAILR_R = period-1;       // timer start value
 	TIMER0_TAMATCHR_R = period-high-1; // duty cycle = high/period
-	TIMER0_CTL_R |= 0x00000001;  // enable timer0A 16-b, PWM
 }
 
 uint8_t map(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
@@ -464,7 +463,7 @@ void manage_picture_menu()
 						}
 						menu=FILE_MENU;
 						current_position=0;
-						show_menu(0/*,SSI0*/);
+						show_menu(0);
 					}
 					else
 					{
@@ -498,7 +497,7 @@ void manage_picture_menu()
 									menu=MAIN_MENU;
 									current_position=4;
 									reset_min_max();
-									show_menu(4/*,SSI0*/);
+									show_menu(4);
 								}
 								else
 								{
@@ -525,7 +524,7 @@ void manage_picture_menu()
 									}
 									current_position=0;
 									clear_screen();
-									show_menu(0/*,SSI0*/);
+									show_menu(0);
 								}
 							}
 						}
@@ -617,7 +616,7 @@ void manage_picture_menu()
 					{
 						if(buzzer == BUZZER_ON)
 						{
-							play_sound(526);
+							play_sound(1000);
 							SysTick_Wait50ms(40);
 							play_sound(0);
 						}
@@ -853,7 +852,7 @@ void manage_paint_menu()
 							{//random
 								clear_ledarray();
 								clear_screen();
-								screen_write("Generating...",ALIGN_CENTRE_CENTRE/*,SSI0*/);
+								screen_write("Generating...",ALIGN_CENTRE_CENTRE);
 								srand(time(NULL));
 								for(c=0;c<144;c++)
 								{
@@ -1174,5 +1173,13 @@ void convert_value_to_string(char str[], int value)
 /*Play a sound in the SMD buzzer*/
 void play_sound(uint16_t high)
 {
+	if(high == 0)
+	{
+		TIMER0_CTL_R &= ~TIMER_CTL_TAEN;  // disable timer0A 16-b, PWM*/
+	}
+	else
+	{
+		TIMER0_CTL_R |= TIMER_CTL_TAEN;  // enable timer0A 16-b, PWM*/
+	}
 	TIMER0_TAMATCHR_R = TIMER0_TAILR_R-high; // duty cycle = high/period
 }
