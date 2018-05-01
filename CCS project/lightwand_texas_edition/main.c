@@ -32,9 +32,10 @@
 #define LIGHTS_OFF 14
 #define LIGHTS_ON 15
 
+
 void initialize_buttons(void);
 void SysTick_Init(void);
-void init_buzzer(void);
+void init_buzzer(uint16_t period, uint16_t high);
 void SysTick_Wait50ms(unsigned long delay);
 uint8_t map(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max);
 void SysTick_Wait(unsigned long delay);
@@ -53,10 +54,10 @@ int bright=5,delay=5,current_position=1;
 int main(void)
 {
 	SysTick_Init();
-	init_buzzer();
+	//init_buzzer(16000, 0);
 	init_1wire_pin();
 	startSSI0();
-	initialize_screen(BACKLIGHT_ON);
+	initialize_screen(BACKLIGHT_ON/*,SSI0*/);
 	clear_screen();
 	/*screen_write("Testing\ncolors...",ALIGN_CENTRE_CENTRE,SSI0);*/
 	//test_colors();
@@ -72,12 +73,13 @@ int main(void)
 	if(reserved_sectors==1)
 	{
 		//Message to be shown if not FAT32 (single format)
-		screen_write("Invalid\nSD card\nformat",ALIGN_CENTRE_CENTRE);
+		screen_write("Invalid\nSD card\nformat",ALIGN_CENTRE_CENTRE/*,SSI0*/);
 	}
 	else
 	{
+
 		long next_cluster=get_root_dir_first_cluster();
-		screen_write("Initialising...",ALIGN_CENTRE_CENTRE);
+		screen_write("Initialising...",ALIGN_CENTRE_CENTRE/*,SSI0*/);
 		do
 		{
 			next_cluster=list_dirs_and_files(next_cluster,SHORT_NAME,GET_SUBDIRS,SD_SSI3);
@@ -87,7 +89,7 @@ int main(void)
 		set_init_menu();
 		initialize_buttons();
 		current_position=2;
-		show_menu(2);
+		show_menu(2/*,SSI0*/);
 		while(1)
 		{
 			char keep_going=0;
@@ -103,12 +105,12 @@ int main(void)
 						{
 							if(backlight==BL_ON)
 							{
-								disable_backlight();
+								disable_backlight(/*SSI0*/);
 								backlight=BL_OFF;
 							}
 							else
 							{
-								enable_backlight();
+								enable_backlight(/*SSI0*/);
 								backlight=BL_ON;
 							}
 						break;
@@ -150,7 +152,7 @@ int main(void)
 							break;
 						}
 					}
-					show_menu(current_position);
+					show_menu(current_position/*,SSI0*/);
 				}
 			}
 			clear_screen();
@@ -162,14 +164,14 @@ int main(void)
 				//send_files_info();
 				clear_screen();
 				set_main_picture_menu();
-				show_menu(1);
+				show_menu(1/*,SSI0*/);
 				current_position=1;
 				manage_picture_menu();
 			}
 			else
 			{
 				set_paint_menu();
-				show_menu(1);
+				show_menu(1/*,SSI0*/);
 				current_position=1;
 				manage_paint_menu();
 			}
@@ -204,7 +206,7 @@ void send_files_info()
 
 void ask_for_bluetooth()
 {
-	screen_write("Set the\nsettings\nthrough\nBluetooh?",ALIGN_CENTRE_CENTRE);
+	screen_write("Set the\nsettings\nthrough\nBluetooh?",ALIGN_CENTRE_CENTRE/*,SSI0*/);
 	bright=(int) UART_InChar();
 	delay=(int) UART_InChar();
 	UART_OutChar('1');
@@ -371,16 +373,26 @@ void SysTick_Init(void){
   NVIC_ST_CTRL_R = 0x00000005;      // enable SysTick with core clock
 }
 
-void init_buzzer(void)
+void init_buzzer(uint16_t period, uint16_t high)
 {
+
 	volatile unsigned long delay;
+	SYSCTL_RCGCTIMER_R |= 0x01;      // activate timer0
 	SYSCTL_RCGC2_R |= 0x00000002;   //  activate clock for Port B
 	delay = SYSCTL_RCGC2_R;
 	GPIO_PORTB_DIR_R |= 0x40;             // make PB6 out
-	GPIO_PORTB_AFSEL_R &= ~0x40;           // disable alt funct on PB6
+	GPIO_PORTB_AFSEL_R |= 0x40;           // enable alt funct on PB6
 	GPIO_PORTB_AMSEL_R &= ~0x40;          // disable analog functionality on PB6
 	GPIO_PORTB_DEN_R |= 0x40;
-	GPIO_PORTB_DATA_R &= ~0x40;
+
+	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xF0FFFFFF)+0x07000000;
+	TIMER0_CTL_R &=~TIMER_CTL_TAEN; //disable timer0A during setup
+	TIMER0_CFG_R = 0x00000004;// configure for 16-bit timer mode
+	                                   // configure for alternate (PWM) mode
+	TIMER0_TAMR_R = (0x00000008|0x00000002);
+	TIMER0_TAILR_R = period-1;       // timer start value
+	TIMER0_TAMATCHR_R = period-high-1; // duty cycle = high/period
+	TIMER0_CTL_R |= 0x00000001;  // enable timer0A 16-b, PWM
 }
 
 uint8_t map(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
@@ -452,7 +464,7 @@ void manage_picture_menu()
 						}
 						menu=FILE_MENU;
 						current_position=0;
-						show_menu(0);
+						show_menu(0/*,SSI0*/);
 					}
 					else
 					{
@@ -486,7 +498,7 @@ void manage_picture_menu()
 									menu=MAIN_MENU;
 									current_position=4;
 									reset_min_max();
-									show_menu(4);
+									show_menu(4/*,SSI0*/);
 								}
 								else
 								{
@@ -513,7 +525,7 @@ void manage_picture_menu()
 									}
 									current_position=0;
 									clear_screen();
-									show_menu(0);
+									show_menu(0/*,SSI0*/);
 								}
 							}
 						}
@@ -605,9 +617,9 @@ void manage_picture_menu()
 					{
 						if(buzzer == BUZZER_ON)
 						{
-							GPIO_PORTB_DATA_R|=0x40;
+							play_sound(526);
 							SysTick_Wait50ms(40);
-							GPIO_PORTB_DATA_R&=~0x40;
+							play_sound(0);
 						}
 						disable_backlight(SSI0);
 						clear_screen();
@@ -623,7 +635,7 @@ void manage_picture_menu()
 						clear_ledarray();
 						show_menu(4);
 						current_position=4;
-						enable_backlight();
+						enable_backlight(/*SSI0*/);
 						if(buzzer == BUZZER_ON)
 						{
 							GPIO_PORTB_DATA_R|=0x40;
@@ -779,12 +791,12 @@ void manage_paint_menu()
 				{
 					if(backlight==BL_ON)
 					{
-						disable_backlight();
+						disable_backlight(/*SSI0*/);
 						backlight=BL_OFF;
 					}
 					else
 					{
-						enable_backlight();
+						enable_backlight(/*SSI0*/);
 						backlight=BL_ON;
 					}
 					break;
@@ -841,7 +853,7 @@ void manage_paint_menu()
 							{//random
 								clear_ledarray();
 								clear_screen();
-								screen_write("Generating...",ALIGN_CENTRE_CENTRE);
+								screen_write("Generating...",ALIGN_CENTRE_CENTRE/*,SSI0*/);
 								srand(time(NULL));
 								for(c=0;c<144;c++)
 								{
@@ -1008,12 +1020,12 @@ void manage_paint_menu()
 				{
 					if(backlight==BL_ON)
 					{
-						disable_backlight();
+						disable_backlight(/*SSI0*/);
 						backlight=BL_OFF;
 					}
 					else
 					{
-						enable_backlight();
+						enable_backlight(/*SSI0*/);
 						backlight=BL_ON;
 					}
 					if(lights==LIGHTS_ON)
@@ -1157,4 +1169,10 @@ void convert_value_to_string(char str[], int value)
 			strcat(str,str3);
 		}
 	}
+}
+
+/*Play a sound in the SMD buzzer*/
+void play_sound(uint16_t high)
+{
+	TIMER0_TAMATCHR_R = TIMER0_TAILR_R-high; // duty cycle = high/period
 }

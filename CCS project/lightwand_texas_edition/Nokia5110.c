@@ -1253,77 +1253,19 @@ void initialize_screen(short backlight)
 	lcd_write(COMMAND, 0x20);              	// we must send 0x20 before modifying the display control mode
 	lcd_write(COMMAND, 0x0C);              	// Display control (0x0C for normal mode, 0x0D for inverse mode)
 
-	/*switch(SSI)
+	switch(backlight)
 	{
-		case SSI0:
-		{*/
-			switch(backlight)
-			{
-				case BACKLIGHT_ON:
-				{
-					GPIO_PORTA_DATA_R&=~0x10;				//Screen's light on
-					break;
-				}
-				case BACKLIGHT_OFF:
-				{
-					GPIO_PORTA_DATA_R|=0x10;				//Screen's light off
-					break;
-				}
-			}
-			/*break;
-		}
-		case SSI1:
+		case BACKLIGHT_ON:
 		{
-			switch(backlight)
-			{
-				case BACKLIGHT_ON:
-				{
-					GPIO_PORTE_DATA_R&=~0x08; //Screen's light on
-					break;
-				}
-				case BACKLIGHT_OFF:
-				{
-					GPIO_PORTE_DATA_R|=0x08; //Screen's light off
-					break;
-				}
-			}
+			GPIO_PORTA_DATA_R&=~0x10;				//Screen's light on
 			break;
 		}
-		case SSI2:
+		case BACKLIGHT_OFF:
 		{
-			switch(backlight)
-			{
-				case BACKLIGHT_ON:
-				{
-					GPIO_PORTB_DATA_R&=~0x40;				//Screen's light on
-					break;
-				}
-				case BACKLIGHT_OFF:
-				{
-					GPIO_PORTB_DATA_R|=0x40;				//Screen's light off
-					break;
-				}
-			}
+			GPIO_PORTA_DATA_R|=0x10;				//Screen's light off
 			break;
 		}
-		case SSI3:
-		{
-			switch(backlight)
-			{
-				case BACKLIGHT_ON:
-				{
-					GPIO_PORTD_DATA_R&=~0x04;				//Screen's light on
-					break;
-				}
-				case BACKLIGHT_OFF:
-				{
-					GPIO_PORTD_DATA_R|=0x04;				//Screen's light off
-					break;
-				}
-			}
-			break;
-		}
-	}*/
+	}
 }
 
 /**
@@ -1472,7 +1414,7 @@ void screen_write(char string_to_write[],short alignment)
 		}
 		while(j<i)
 		{
-			char_write(string_to_write[j]);
+			char_write(string_to_write[j]/*,SSI0*/);
 			j++;
 		}
 		if(string_to_write[i]!='\0')
@@ -1583,7 +1525,7 @@ int set_Y_position_centre(int lines,short SSI)
 	return y_pos;
 }
 
-void startSSI0()//This one works
+void startSSI0()
 {
 	  volatile unsigned long delay;
 	  SYSCTL_RCGC2_R |= 0x00000001;   		//  activate clock for Port A
@@ -1616,7 +1558,6 @@ void startSSI0()//This one works
 	  RESET = RESET_HIGH;                   // negative logic
 
 }
-
 
 unsigned short get_character_length(char character)
 {
@@ -2004,7 +1945,7 @@ void show_menu(char current_position)
 			}
 		}
 	//}
-	screen_write(string,ALIGN_LEFT_TOP);
+	screen_write(string,ALIGN_LEFT_TOP/*,SSI0*/);
 	lcd_write(COMMAND,0x40+(current_position-min));
 	lcd_write(COMMAND,0x80);
 	lcd_write(DATA,0xFF);

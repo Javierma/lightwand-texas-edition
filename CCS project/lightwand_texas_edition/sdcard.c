@@ -230,7 +230,6 @@ void initialise_sd(enum SSI SSI_number)
 	}
 }
 
-
 void sd_startSSI3()
 {
 	volatile unsigned long delay;
@@ -334,39 +333,11 @@ void tx_SSI()
 }
 
 /*Change speed to (?) 8 MHz*/
-void change_speed(enum SSI SSI_number)
+void change_speed()
 {
-	switch(SSI_number)
-	{
-		case SD_SSI0:
-		{
-			SSI0_CC_R|=SSI_CPSR_CPSDVSR_M;// Configure prescale divisor
-			SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; // must be even number
-			SSI0_CR0_R |=0x0000;
-			break;
-		}
-		case SD_SSI1:
-		{
-			SSI1_CC_R|=SSI_CPSR_CPSDVSR_M;// Configure prescale divisor
-			SSI1_CPSR_R = (SSI1_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; // must be even number
-			SSI1_CR0_R |=0x0000;
-			break;
-		}
-		case SD_SSI2:
-		{
-			SSI2_CC_R|=SSI_CPSR_CPSDVSR_M;// Configure prescale divisor
-			SSI2_CPSR_R = (SSI2_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; // must be even number
-			SSI2_CR0_R |=0x0000;
-			break;
-		}
-		case SD_SSI3:
-		{
-			SSI3_CC_R|=SSI_CPSR_CPSDVSR_M;// Configure prescale divisor
-			SSI3_CPSR_R = (SSI3_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; // must be even number
-			SSI3_CR0_R |=0x0000;
-			break;
-		}
-	}
+	SSI3_CC_R|=SSI_CPSR_CPSDVSR_M;// Configure prescale divisor
+	SSI3_CPSR_R = (SSI3_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; // must be even number
+	SSI3_CR0_R |=0x0000;
 }
 
 void read_csd(enum SSI SSI_number)
@@ -925,7 +896,7 @@ unsigned int rcvr_datablock (
   return 1;                    /* Return with success */
 }
 
-void rcvr_spi_m(unsigned char *dst/*,enum SSI SSI_number*/){
+void rcvr_spi_m(unsigned char *dst){
   *dst = sd_read();
 }
 

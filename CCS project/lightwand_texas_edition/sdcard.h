@@ -69,7 +69,7 @@ void cs_low(/*enum SSI*/);
 void dummy_clock(/*enum SSI*/);
 void tx_high(/*enum SSI*/);
 void Timer5_Init(void);
-void change_speed(enum SSI);
+void change_speed();
 long open_file(long next_cluster,enum SSI);
 long get_root_dir_first_cluster(void);
 long get_first_cluster(int pos);
