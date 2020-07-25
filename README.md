@@ -1,6 +1,6 @@
-# Lightwand Texas Edition
+# Lightwand Texas Edition v 2.0
 
-Copyright (C) May 2018, Javier Martínez Arrieta
+Copyright (C) May 2018, Javier MartÃ­nez Arrieta
 
 The LightWand Texas Edition controller is released under an Attributtion-ShareAlike 4.0 International (CC BY-SA 4.0). Therefore, anyone is free to:
 
@@ -22,3 +22,6 @@ The following folders contain all the necessary things:
 -Sketchup design: Contains the 3D design of the hardware
 
 -Lightwand Texas Edition English Guide: The manual to be used to know about the different HW parts, soldering steps, creating PNM images and how to navigate through the different menus 
+
+
+In order to know how to import the project in Code Composer Studio, configure the project settings and configure interrupts, go to the [wiki page](https://github.com/Javierma/lightwand-texas-edition/wiki)
