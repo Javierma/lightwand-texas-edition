@@ -2,24 +2,24 @@
  * Nokia5110.c
  *
  *  Created on: 2/10/2015
- *  Author: Javier Martínez Arrieta
+ *  Author: Javier MartÃ­nez Arrieta
  *  Version: 2.0
  *  This is part of the Nokia5110 library, with functions that will allow you to work with the nokia5110 screen, known as well as PCD8544.
  *  You can find a copy of the Datasheet in the parent folder of the project.
  */
 
- /*  Copyright (C) 2015 Javier Martínez Arrieta
+ /*  Copyright (C) 2015 Javier MartÃ­nez Arrieta
  *
  *  This project is licensed under Creative Commons Attribution-Non Commercial-Share Alike 4.0 International (CC BY-NC-SA 4.0). According to this license you are free to:
- *  Share — copy and redistribute the material in any medium or format.
- *  Adapt — remix, transform, and build upon the material.
+ *  Share & copy and redistribute the material in any medium or format.
+ *  Adapt & remix, transform, and build upon the material.
  *  The licensor cannot revoke these freedoms as long as you follow the license terms.
  *	Complete information about this license can be found at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
  *
  */
 
 #include "Nokia5110.h"
-#include "inc/tm4c123gh6pm.h"
+#include "/Users/javiermartinez/TivaWare/inc/tm4c123gh6pm.h"
 
 unsigned char main_menu_items[12][25];
 unsigned char menu_items[12][25];
@@ -69,1174 +69,1190 @@ void lcd_write(enum typeOfWrite type,char message)
  */
 void char_write(char character)
 {
-	if(character>='A'&&character<='Z')
-	{
-		switch(character)
-		{
-			case 'A':
-			{
-				//A
-				lcd_write(DATA,0xF8);
-				lcd_write(DATA,0x24);
-				lcd_write(DATA,0x22);
-				lcd_write(DATA,0x24);
-				lcd_write(DATA,0xF8);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'B':
-			{
-				//B
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x6C);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'C':
-			{
-				//C
-				lcd_write(DATA,0x7C);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x44);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'D':
-			{
-				//D
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x44);
-				lcd_write(DATA,0x38);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'E':
-			{
-				//E
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'F':
-			{
-				//F
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x12);
-				lcd_write(DATA,0x12);
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'G':
-			{
-				//G
-				lcd_write(DATA,0x7C);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x66);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'H':
-			{
-				//H
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'I':
-			{
-				//I
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'J':
-			{
-				//J
-				lcd_write(DATA,0x70);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x7E);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'K':
-			{
-				//K
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0x28);
-				lcd_write(DATA,0x44);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'L':
-			{
-				//L
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'M':
-			{
-				//M
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x04);
-				lcd_write(DATA,0x08);
-				lcd_write(DATA,0x04);
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'N':
-			{
-				//N
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x08);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0x20);
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x00);
-				break;
-			}
+    if(character>='A'&&character<='Z')
+    {
+        switch(character)
+        {
+            case 'A':
+            {
+                //A
+                lcd_write(DATA,0xF8);
+                lcd_write(DATA,0x24);
+                lcd_write(DATA,0x22);
+                lcd_write(DATA,0x24);
+                lcd_write(DATA,0xF8);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'B':
+            {
+                //B
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x6C);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'C':
+            {
+                //C
+                lcd_write(DATA,0x7C);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x44);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'D':
+            {
+                //D
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x44);
+                lcd_write(DATA,0x38);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'E':
+            {
+                //E
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'F':
+            {
+                //F
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x12);
+                lcd_write(DATA,0x12);
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'G':
+            {
+                //G
+                lcd_write(DATA,0x7C);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x66);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'H':
+            {
+                //H
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'I':
+            {
+                //I
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'J':
+            {
+                //J
+                lcd_write(DATA,0x70);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x7E);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'K':
+            {
+                //K
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0x28);
+                lcd_write(DATA,0x44);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'L':
+            {
+                //L
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'M':
+            {
+                //M
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x04);
+                lcd_write(DATA,0x08);
+                lcd_write(DATA,0x04);
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'N':
+            {
+                //N
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x08);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0x20);
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x00);
+                break;
+            }
 
-			case 'O':
-			{
-				//O
-				lcd_write(DATA,0x7C);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0x7C);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'P':
-			{
-				//P
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x12);
-				lcd_write(DATA,0x12);
-				lcd_write(DATA,0x12);
-				lcd_write(DATA,0x0C);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'Q':
-			{
-				//Q
-				lcd_write(DATA,0x7C);
-				lcd_write(DATA,0x82);
-				lcd_write(DATA,0xA2);
-				lcd_write(DATA,0xC2);
-				lcd_write(DATA,0xFC);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'R':
-			{
-				//R
-				lcd_write(DATA,0xFC);
-				lcd_write(DATA,0x32);
-				lcd_write(DATA,0x32);
-				lcd_write(DATA,0x52);
-				lcd_write(DATA,0x8C);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'S':
-			{
-				//S
-				lcd_write(DATA,0x8C);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x62);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'T':
-			{
-				//T
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0xFE);
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0x02);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'U':
-			{
-				//U
-				lcd_write(DATA,0x7E);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x7E);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'V':
-			{
-				//V
-				lcd_write(DATA,0x3E);
-				lcd_write(DATA,0x40);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x40);
-				lcd_write(DATA,0x3E);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'W':
-			{
-				//W
-				lcd_write(DATA,0x7E);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x40);
-				lcd_write(DATA,0x80);
-				lcd_write(DATA,0x7E);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'X':
-			{
-				//X
-				lcd_write(DATA,0xC6);
-				lcd_write(DATA,0x28);
-				lcd_write(DATA,0x10);
-				lcd_write(DATA,0x28);
-				lcd_write(DATA,0xC6);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'Y':
-			{
-				//Y
-				lcd_write(DATA,0x06);
-				lcd_write(DATA,0x08);
-				lcd_write(DATA,0xF0);
-				lcd_write(DATA,0x08);
-				lcd_write(DATA,0x06);
-				lcd_write(DATA,0x00);
-				break;
-			}
-			case 'Z':
-			{
-				//Z
-				lcd_write(DATA,0xD2);
-				lcd_write(DATA,0xB2);
-				lcd_write(DATA,0x92);
-				lcd_write(DATA,0x9A);
-				lcd_write(DATA,0x96);
-				lcd_write(DATA,0x00);
-				break;
-			}
-		}
-	}
-	else
-	{
-		if(character>='a'&&character<='z')
-		{
-			switch(character)
-			{
-				case 'a':
-				{
-					//a
-					lcd_write(DATA,0x40);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0x70);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'b':
-				{
-					//b
-					lcd_write(DATA,0xFE);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x60);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'c':
-				{
-					//c
-					lcd_write(DATA,0x70);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x50);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'd':
-				{
-					//d
-					lcd_write(DATA,0x60);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0xFE);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'e':
-				{
-					//e
-					lcd_write(DATA,0x70);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'f':
-				{
-					//f
-					lcd_write(DATA,0x20);
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x24);
-					lcd_write(DATA,0x04);
-					lcd_write(DATA,0x04);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'g':
-				{
-					//g
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x94);
-					lcd_write(DATA,0x94);
-					lcd_write(DATA,0x94);
-					lcd_write(DATA,0x7C);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'h':
-				{
-					//h
-					lcd_write(DATA,0xFE);
-					lcd_write(DATA,0x20);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0xE0);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'i':
-				{
-					//i
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0xFA);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'j':
-				{
-					//j
-					lcd_write(DATA,0x40);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x7A);
-					lcd_write(DATA,0x00);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'k':
-				{
-					//k
-					lcd_write(DATA,0xFE);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x28);
-					lcd_write(DATA,0x44);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'l':
-				{
-					//l
-					lcd_write(DATA,0x00);
-					lcd_write(DATA,0x82);
-					lcd_write(DATA,0xFE);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x00);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'm':
-				{
-					//m
-					lcd_write(DATA,0xF0);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0xF0);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0xF0);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'n':
-				{
-					//n
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0xF0);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'o':
-				{
-					//o
-					lcd_write(DATA,0x70);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x70);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'p':
-				{
-					//p
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x30);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'q':
-				{
-					//q
-					lcd_write(DATA,0x30);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'r':
-				{
-					//r
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 's':
-				{
-					//s
-					lcd_write(DATA,0x90);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0x48);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 't':
-				{
-					//t
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x7C);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x00);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'u':
-				{
-					//u
-					lcd_write(DATA,0x78);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0xF8);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'v':
-				{
-					//v
-					lcd_write(DATA,0x38);
-					lcd_write(DATA,0x40);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x40);
-					lcd_write(DATA,0x38);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'w':
-				{
-					//w
-					lcd_write(DATA,0x78);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x40);
-					lcd_write(DATA,0x80);
-					lcd_write(DATA,0x78);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'x':
-				{
-					//x
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x50);
-					lcd_write(DATA,0x20);
-					lcd_write(DATA,0x50);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'y':
-				{
-					//y
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x50);
-					lcd_write(DATA,0x20);
-					lcd_write(DATA,0x10);
-					lcd_write(DATA,0x08);
-					lcd_write(DATA,0x00);
-					break;
-				}
-				case 'z':
-				{
-					//z
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0xC8);
-					lcd_write(DATA,0xA8);
-					lcd_write(DATA,0x98);
-					lcd_write(DATA,0x88);
-					lcd_write(DATA,0x00);
-					break;
-				}
-			}
-		}
-		else
-		{
-			if(character>='á'&&character<='ú')
-			{
-				switch(character)
-				{
-					case 'á':
-					{
-						//á
-						lcd_write(DATA,0x40);
-						lcd_write(DATA,0xA8);
-						lcd_write(DATA,0xAA);
-						lcd_write(DATA,0xA9);
-						lcd_write(DATA,0x70);
-						lcd_write(DATA,0x00);
-						break;
-					}
-					case 'é':
-					{
-						//é
-						lcd_write(DATA,0x70);
-						lcd_write(DATA,0xA8);
-						lcd_write(DATA,0xAA);
-						lcd_write(DATA,0xA9);
-						lcd_write(DATA,0x90);
-						lcd_write(DATA,0x00);
-						break;
-					}
-					case 'í':
-					{
-						//í
-						lcd_write(DATA,0x80);
-						lcd_write(DATA,0x90);
-						lcd_write(DATA,0xF4);
-						lcd_write(DATA,0x82);
-						lcd_write(DATA,0x80);
-						lcd_write(DATA,0x00);
-						break;
-					}
-					case 'ó':
-					{
-						//ó
-						lcd_write(DATA,0x70);
-						lcd_write(DATA,0x88);
-						lcd_write(DATA,0x8A);
-						lcd_write(DATA,0x89);
-						lcd_write(DATA,0x70);
-						lcd_write(DATA,0x00);
-						break;
-					}
-					case 'ú':
-					{
-						//ú
-						lcd_write(DATA,0x78);
-						lcd_write(DATA,0x80);
-						lcd_write(DATA,0x82);
-						lcd_write(DATA,0x81);
-						lcd_write(DATA,0xF8);
-						lcd_write(DATA,0x00);
-						break;
-					}
-					case 'ñ':
-					{
-						//ñ
-						lcd_write(DATA,0xF4);
-						lcd_write(DATA,0x22);
-						lcd_write(DATA,0x16);
-						lcd_write(DATA,0x14);
-						lcd_write(DATA,0xE2);
-						lcd_write(DATA,0x00);
-						break;
-					}
-
-				}
-			}
-			else
-			{
-				if(character>='0'&&character<='9')
-				{
-					switch(character)
-					{
-						case '0':
-						{
-							//O
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '1':
-						{
-							//1
-							lcd_write(DATA,0x88);
-							lcd_write(DATA,0x84);
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '2':
-						{
-							//2
-							lcd_write(DATA,0x84);
-							lcd_write(DATA,0xC2);
-							lcd_write(DATA,0xA2);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0x8C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '3':
-						{
-							//3
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0x6C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '4':
-						{
-							//4
-							lcd_write(DATA,0x20);
-							lcd_write(DATA,0x30);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x24);
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '5':
-						{
-							//5
-							lcd_write(DATA,0x8E);
-							lcd_write(DATA,0x8A);
-							lcd_write(DATA,0x8A);
-							lcd_write(DATA,0x8A);
-							lcd_write(DATA,0x72);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '6':
-						{
-							//6
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0xA4);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0x64);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '7':
-						{
-							//7
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x42);
-							lcd_write(DATA,0x22);
-							lcd_write(DATA,0x12);
-							lcd_write(DATA,0x0E);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '8':
-						{
-							//8
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0xAA);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0xAA);
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '9':
-						{
-							//9
-							lcd_write(DATA,0x0C);
-							lcd_write(DATA,0x12);
-							lcd_write(DATA,0x12);
-							lcd_write(DATA,0x0A);
-							lcd_write(DATA,0xFC);
-							lcd_write(DATA,0x00);
-							break;
-						}
-					}
-				}
-				else
-				{
-					//Signos y demás
-					switch(character)
-					{
-						case 'Ñ':
-						{
-							//Ñ
-							lcd_write(DATA,0xFA);
-							lcd_write(DATA,0x09);
-							lcd_write(DATA,0x13);
-							lcd_write(DATA,0x12);
-							lcd_write(DATA,0x22);
-							lcd_write(DATA,0xF9);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case 'ü':
-						{
-							//u
-							lcd_write(DATA,0x78);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x82);
-							lcd_write(DATA,0xF8);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case' ':
-						{
-							//' '
-							lcd_write(DATA,0x00);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '¡':
-						{
-							//¡
-							lcd_write(DATA,0xFA);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '!':
-						{
-							//!
-							lcd_write(DATA,0xBE);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '?':
-						{
-							//?
-							lcd_write(DATA,0x04);
-							lcd_write(DATA,0x02);
-							lcd_write(DATA,0xA2);
-							lcd_write(DATA,0x12);
-							lcd_write(DATA,0x0C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '¿':
-						{
-							//¿
-							lcd_write(DATA,0x60);
-							lcd_write(DATA,0x90);
-							lcd_write(DATA,0x8A);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x40);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '|':
-						{
-							//|
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '"':
-						{
-							//"
-							lcd_write(DATA,0x06);
-							lcd_write(DATA,0x00);
-							lcd_write(DATA,0x06);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '·':
-						{
-							//·
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '#':
-						{
-							//#
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '$':
-						{
-							//$
-							lcd_write(DATA,0x48);
-							lcd_write(DATA,0x54);
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x54);
-							lcd_write(DATA,0x24);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '~':
-						{
-							//~
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '%':
-						{
-							//%
-							lcd_write(DATA,0x04);
-							lcd_write(DATA,0x4A);
-							lcd_write(DATA,0x24);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x24);
-							lcd_write(DATA,0x52);
-							lcd_write(DATA,0x20);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '€':
-						{
-							//€
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x7E);
-							lcd_write(DATA,0x99);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x42);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '&':
-						{
-							//&
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0xAA);
-							lcd_write(DATA,0x92);
-							lcd_write(DATA,0xAA);
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0xA0);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '¬':
-						{
-							//¬
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '/':
-						{
-							// /
-							lcd_write(DATA,0x40);
-							lcd_write(DATA,0x20);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x04);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '(':
-						{
-							//(
-							lcd_write(DATA,0x3C);
-							lcd_write(DATA,0x42);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case ')':
-						{
-							//)
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x42);
-							lcd_write(DATA,0x3C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '=':
-						{
-							//=
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '\'':
-						{
-							//'
-							lcd_write(DATA,0x06);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '-':
-						{
-							//-
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '+':
-						{
-							//+
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x38);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '*':
-						{
-							//*
-							lcd_write(DATA,0x54);
-							lcd_write(DATA,0x38);
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x38);
-							lcd_write(DATA,0x54);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '@':
-						{
-							//@
-							lcd_write(DATA,0x38);
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0xBA);
-							lcd_write(DATA,0xAA);
-							lcd_write(DATA,0xBA);
-							lcd_write(DATA,0xA4);
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '>':
-						{
-							//>
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '<':
-						{
-							//<
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x44);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '[':
-						{
-							//[
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case ']':
-						{
-							//]
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0xFE);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '{':
-						{
-							//{
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x66);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '}':
-						{
-							//}
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x81);
-							lcd_write(DATA,0x66);
-							lcd_write(DATA,0x18);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case ',':
-						{
-							//,
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x40);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case ';':
-						{
-							//;
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x50);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case ':':
-						{
-							//:
-							lcd_write(DATA,0x28);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '.':
-						{
-							//.
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '_':
-						{
-							//_
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x80);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case 'º':
-						{
-							lcd_write(DATA,0x14);
-							lcd_write(DATA,0x1A);
-							lcd_write(DATA,0x14);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case 'ª':
-						{
-							lcd_write(DATA,0x52);
-							lcd_write(DATA,0x6A);
-							lcd_write(DATA,0x6A);
-							lcd_write(DATA,0x7C);
-							lcd_write(DATA,0x00);
-							break;
-						}
-						case '\\':
-						{
-							//\
-							lcd_write(DATA,0x04);
-							lcd_write(DATA,0x08);
-							lcd_write(DATA,0x10);
-							lcd_write(DATA,0x20);
-							lcd_write(DATA,0x40);
-							lcd_write(DATA,0x00);
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
+            case 'O':
+            {
+                //O
+                lcd_write(DATA,0x7C);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0x7C);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'P':
+            {
+                //P
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x12);
+                lcd_write(DATA,0x12);
+                lcd_write(DATA,0x12);
+                lcd_write(DATA,0x0C);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'Q':
+            {
+                //Q
+                lcd_write(DATA,0x7C);
+                lcd_write(DATA,0x82);
+                lcd_write(DATA,0xA2);
+                lcd_write(DATA,0xC2);
+                lcd_write(DATA,0xFC);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'R':
+            {
+                //R
+                lcd_write(DATA,0xFC);
+                lcd_write(DATA,0x32);
+                lcd_write(DATA,0x32);
+                lcd_write(DATA,0x52);
+                lcd_write(DATA,0x8C);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'S':
+            {
+                //S
+                lcd_write(DATA,0x8C);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x62);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'T':
+            {
+                //T
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0xFE);
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0x02);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'U':
+            {
+                //U
+                lcd_write(DATA,0x7E);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x7E);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'V':
+            {
+                //V
+                lcd_write(DATA,0x3E);
+                lcd_write(DATA,0x40);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x40);
+                lcd_write(DATA,0x3E);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'W':
+            {
+                //W
+                lcd_write(DATA,0x7E);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x40);
+                lcd_write(DATA,0x80);
+                lcd_write(DATA,0x7E);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'X':
+            {
+                //X
+                lcd_write(DATA,0xC6);
+                lcd_write(DATA,0x28);
+                lcd_write(DATA,0x10);
+                lcd_write(DATA,0x28);
+                lcd_write(DATA,0xC6);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'Y':
+            {
+                //Y
+                lcd_write(DATA,0x06);
+                lcd_write(DATA,0x08);
+                lcd_write(DATA,0xF0);
+                lcd_write(DATA,0x08);
+                lcd_write(DATA,0x06);
+                lcd_write(DATA,0x00);
+                break;
+            }
+            case 'Z':
+            {
+                //Z
+                lcd_write(DATA,0xD2);
+                lcd_write(DATA,0xB2);
+                lcd_write(DATA,0x92);
+                lcd_write(DATA,0x9A);
+                lcd_write(DATA,0x96);
+                lcd_write(DATA,0x00);
+                break;
+            }
+        }
+    }
+    else
+    {
+        if(character>='a'&&character<='z')
+        {
+            switch(character)
+            {
+                case 'a':
+                {
+                    //a
+                    lcd_write(DATA,0x40);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0x70);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'b':
+                {
+                    //b
+                    lcd_write(DATA,0xFE);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x60);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'c':
+                {
+                    //c
+                    lcd_write(DATA,0x70);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x50);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'd':
+                {
+                    //d
+                    lcd_write(DATA,0x60);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0xFE);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'e':
+                {
+                    //e
+                    lcd_write(DATA,0x70);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'f':
+                {
+                    //f
+                    lcd_write(DATA,0x20);
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x24);
+                    lcd_write(DATA,0x04);
+                    lcd_write(DATA,0x04);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'g':
+                {
+                    //g
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x94);
+                    lcd_write(DATA,0x94);
+                    lcd_write(DATA,0x94);
+                    lcd_write(DATA,0x7C);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'h':
+                {
+                    //h
+                    lcd_write(DATA,0xFE);
+                    lcd_write(DATA,0x20);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0xE0);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'i':
+                {
+                    //i
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0xFA);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'j':
+                {
+                    //j
+                    lcd_write(DATA,0x40);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x7A);
+                    lcd_write(DATA,0x00);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'k':
+                {
+                    //k
+                    lcd_write(DATA,0xFE);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x28);
+                    lcd_write(DATA,0x44);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'l':
+                {
+                    //l
+                    lcd_write(DATA,0x00);
+                    lcd_write(DATA,0x82);
+                    lcd_write(DATA,0xFE);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x00);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'm':
+                {
+                    //m
+                    lcd_write(DATA,0xF0);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0xF0);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0xF0);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'n':
+                {
+                    //n
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0xF0);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'o':
+                {
+                    //o
+                    lcd_write(DATA,0x70);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x70);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'p':
+                {
+                    //p
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x30);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'q':
+                {
+                    //q
+                    lcd_write(DATA,0x30);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'r':
+                {
+                    //r
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 's':
+                {
+                    //s
+                    lcd_write(DATA,0x90);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0x48);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 't':
+                {
+                    //t
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x7C);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x00);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'u':
+                {
+                    //u
+                    lcd_write(DATA,0x78);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0xF8);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'v':
+                {
+                    //v
+                    lcd_write(DATA,0x38);
+                    lcd_write(DATA,0x40);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x40);
+                    lcd_write(DATA,0x38);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'w':
+                {
+                    //w
+                    lcd_write(DATA,0x78);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x40);
+                    lcd_write(DATA,0x80);
+                    lcd_write(DATA,0x78);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'x':
+                {
+                    //x
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x50);
+                    lcd_write(DATA,0x20);
+                    lcd_write(DATA,0x50);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'y':
+                {
+                    //y
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x50);
+                    lcd_write(DATA,0x20);
+                    lcd_write(DATA,0x10);
+                    lcd_write(DATA,0x08);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+                case 'z':
+                {
+                    //z
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0xC8);
+                    lcd_write(DATA,0xA8);
+                    lcd_write(DATA,0x98);
+                    lcd_write(DATA,0x88);
+                    lcd_write(DATA,0x00);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            if((character>='Ã¡'&&character<='Ãº') || character=='\x91' || character=='\xa1' || character=='\xa9' || character=='\xad' || character=='\xb3' || character=='\xba' || character=='\xb1')
+            {
+                switch(character)
+                {
+                    case 'Ã¡':
+                    case '\xa1':
+                    {
+                        //Ã¡
+                        lcd_write(DATA,0x40);
+                        lcd_write(DATA,0xA8);
+                        lcd_write(DATA,0xAA);
+                        lcd_write(DATA,0xA9);
+                        lcd_write(DATA,0x70);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ã©':
+                    case '\xa9':
+                    {
+                        //Ã©
+                        lcd_write(DATA,0x70);
+                        lcd_write(DATA,0xA8);
+                        lcd_write(DATA,0xAA);
+                        lcd_write(DATA,0xA9);
+                        lcd_write(DATA,0x90);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ã­':
+                    case '\xad':
+                    {
+                        //Ã­
+                        lcd_write(DATA,0x80);
+                        lcd_write(DATA,0x90);
+                        lcd_write(DATA,0xF4);
+                        lcd_write(DATA,0x82);
+                        lcd_write(DATA,0x80);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ã³':
+                    case '\xb3':
+                    {
+                        //Ã³
+                        lcd_write(DATA,0x70);
+                        lcd_write(DATA,0x88);
+                        lcd_write(DATA,0x8A);
+                        lcd_write(DATA,0x89);
+                        lcd_write(DATA,0x70);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ãº':
+                    case '\xba':
+                    {
+                        //Ãº
+                        lcd_write(DATA,0x78);
+                        lcd_write(DATA,0x80);
+                        lcd_write(DATA,0x82);
+                        lcd_write(DATA,0x81);
+                        lcd_write(DATA,0xF8);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ã±':
+                    case '\xb1':
+                    {
+                        //Ã±
+                        lcd_write(DATA,0xF4);
+                        lcd_write(DATA,0x22);
+                        lcd_write(DATA,0x16);
+                        lcd_write(DATA,0x14);
+                        lcd_write(DATA,0xE2);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                    case 'Ã‘':
+                    case '\x91':
+                    {
+                        //Ã‘
+                        lcd_write(DATA,0xFA);
+                        lcd_write(DATA,0x09);
+                        lcd_write(DATA,0x13);
+                        lcd_write(DATA,0x12);
+                        lcd_write(DATA,0x22);
+                        lcd_write(DATA,0xF9);
+                        lcd_write(DATA,0x00);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(character>='0'&&character<='9')
+                {
+                    switch(character)
+                    {
+                        case '0':
+                        {
+                            //O
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '1':
+                        {
+                            //1
+                            lcd_write(DATA,0x88);
+                            lcd_write(DATA,0x84);
+                            lcd_write(DATA,0xFE);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '2':
+                        {
+                            //2
+                            lcd_write(DATA,0x84);
+                            lcd_write(DATA,0xC2);
+                            lcd_write(DATA,0xA2);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0x8C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '3':
+                        {
+                            //3
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0x6C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '4':
+                        {
+                            //4
+                            lcd_write(DATA,0x20);
+                            lcd_write(DATA,0x30);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x24);
+                            lcd_write(DATA,0xFE);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '5':
+                        {
+                            //5
+                            lcd_write(DATA,0x8E);
+                            lcd_write(DATA,0x8A);
+                            lcd_write(DATA,0x8A);
+                            lcd_write(DATA,0x8A);
+                            lcd_write(DATA,0x72);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '6':
+                        {
+                            //6
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0xA4);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0x64);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '7':
+                        {
+                            //7
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x42);
+                            lcd_write(DATA,0x22);
+                            lcd_write(DATA,0x12);
+                            lcd_write(DATA,0x0E);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '8':
+                        {
+                            //8
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0xAA);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0xAA);
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '9':
+                        {
+                            //9
+                            lcd_write(DATA,0x0C);
+                            lcd_write(DATA,0x12);
+                            lcd_write(DATA,0x12);
+                            lcd_write(DATA,0x0A);
+                            lcd_write(DATA,0xFC);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //other characters
+                    switch(character)
+                    {
+                        case 'Ã¼':
+                        case '\xbc':
+                        {
+                            //Ã¼
+                            lcd_write(DATA,0x78);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x82);
+                            lcd_write(DATA,0xF8);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Â¡':
+                        case '\xa1':
+                        {
+                            //Â¡
+                            lcd_write(DATA,0xFA);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '!':
+                        {
+                            //!
+                            lcd_write(DATA,0xBE);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '?':
+                        {
+                            //?
+                            lcd_write(DATA,0x04);
+                            lcd_write(DATA,0x02);
+                            lcd_write(DATA,0xA2);
+                            lcd_write(DATA,0x12);
+                            lcd_write(DATA,0x0C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Â¿':
+                        case '\xbf':
+                        {
+                            //Â¿
+                            lcd_write(DATA,0x60);
+                            lcd_write(DATA,0x90);
+                            lcd_write(DATA,0x8A);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x40);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '|':
+                        {
+                            //|
+                            lcd_write(DATA,0xFE);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '"':
+                        {
+                            //"
+                            lcd_write(DATA,0x06);
+                            lcd_write(DATA,0x00);
+                            lcd_write(DATA,0x06);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Â·':
+                        {
+                            //Â·
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '#':
+                        {
+                            //#
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '$':
+                        {
+                            //$
+                            lcd_write(DATA,0x48);
+                            lcd_write(DATA,0x54);
+                            lcd_write(DATA,0xFE);
+                            lcd_write(DATA,0x54);
+                            lcd_write(DATA,0x24);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '~':
+                        {
+                            //~
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '%':
+                        {
+                            //%
+                            lcd_write(DATA,0x04);
+                            lcd_write(DATA,0x4A);
+                            lcd_write(DATA,0x24);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x24);
+                            lcd_write(DATA,0x52);
+                            lcd_write(DATA,0x20);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'â‚¬':
+                        case '\x82':
+                        {
+                            //â‚¬
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x7E);
+                            lcd_write(DATA,0x99);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x42);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '&':
+                        {
+                            //&
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0xAA);
+                            lcd_write(DATA,0x92);
+                            lcd_write(DATA,0xAA);
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0xA0);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Â¬':
+                        {
+                            //Â¬
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '/':
+                        {
+                            // /
+                            lcd_write(DATA,0x40);
+                            lcd_write(DATA,0x20);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x04);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '(':
+                        {
+                            //(
+                            lcd_write(DATA,0x3C);
+                            lcd_write(DATA,0x42);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case ')':
+                        {
+                            //)
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x42);
+                            lcd_write(DATA,0x3C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '=':
+                        {
+                            //=
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '\'':
+                        {
+                            //'
+                            lcd_write(DATA,0x06);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '-':
+                        {
+                            //-
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '+':
+                        {
+                            //+
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x38);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '*':
+                        {
+                            //*
+                            lcd_write(DATA,0x54);
+                            lcd_write(DATA,0x38);
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x38);
+                            lcd_write(DATA,0x54);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '@':
+                        {
+                            //@
+                            lcd_write(DATA,0x38);
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0xBA);
+                            lcd_write(DATA,0xAA);
+                            lcd_write(DATA,0xBA);
+                            lcd_write(DATA,0xA4);
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '>':
+                        {
+                            //>
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '<':
+                        {
+                            //<
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x44);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '[':
+                        {
+                            //[
+                            lcd_write(DATA,0xFF);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case ']':
+                        {
+                            //]
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0xFF);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '{':
+                        {
+                            //{
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x66);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '}':
+                        {
+                            //}
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x81);
+                            lcd_write(DATA,0x66);
+                            lcd_write(DATA,0x18);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case ',':
+                        {
+                            //,
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x40);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case ';':
+                        {
+                            //;
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x50);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case ':':
+                        {
+                            //:
+                            lcd_write(DATA,0x28);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '.':
+                        {
+                            //.
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '_':
+                        {
+                            //_
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x80);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Âº':
+                        {
+                            lcd_write(DATA,0x14);
+                            lcd_write(DATA,0x1A);
+                            lcd_write(DATA,0x14);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 'Âª':
+                        {
+                            lcd_write(DATA,0x52);
+                            lcd_write(DATA,0x6A);
+                            lcd_write(DATA,0x6A);
+                            lcd_write(DATA,0x7C);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case '\\':
+                        {
+                            //\
+                            lcd_write(DATA,0x04);
+                            lcd_write(DATA,0x08);
+                            lcd_write(DATA,0x10);
+                            lcd_write(DATA,0x20);
+                            lcd_write(DATA,0x40);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 0x20:
+                        {
+                            //' '
+                            lcd_write(DATA,0x00);
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                        case 0x7F:
+                        {
+                            //DEL
+                            lcd_write(DATA,0x00);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -1561,248 +1577,258 @@ void startSSI0()
 
 unsigned short get_character_length(char character)
 {
-	//int character_length;
-	short character_length;
-	if(character>='A'&&character<='Z')
-	{
-		character_length=6;
-	}
-	else
-	{
-		if(character>='a'&&character<='z')
-		{
-			character_length=6;
-		}
-		else
-		{
-			if(character>='á'&&character<='ú')
-			{
-				switch(character)
-				{
-					case 'Ñ':
-					{
-						character_length=7;
-						break;
-					}
-					default:
-					{
-						character_length=6;
-						break;
-					}
-				}
-			}
-			else
-			{
-				if(character>='0'&&character<='9')
-				{
-					character_length=6;
-				}
-				else
-				{
-					//Signos y demás
-					switch(character)
-					{
-						case 'ü':
-						{
-							character_length=6;
-							break;
-						}
-						case' ':
-						{
-							character_length=2;
-							break;
-						}
-						case '¡':
-						{
-							character_length=2;
-							break;
-						}
-						case '!':
-						{
-							character_length=2;
-							break;
-						}
-						case '?':
-						{
-							character_length=6;
-							break;
-						}
-						case '¿':
-						{
-							character_length=6;
-							break;
-						}
-						case '|':
-						{
-							character_length=2;
-							break;
-						}
-						case '"':
-						{
-							character_length=4;
-							break;
-						}
-						case '·':
-						{
-							character_length=2;
-							break;
-						}
-						case '#':
-						{
-							character_length=6;
-							break;
-						}
-						case '$':
-						{
-							character_length=6;
-							break;
-						}
-						case '~':
-						{
-							character_length=6;
-							break;
-						}
-						case '%':
-						{
-							character_length=9;
-							break;
-						}
-						case '€':
-						{
-							character_length=6;
-							break;
-						}
-						case '&':
-						{
-							character_length=7;
-							break;
-						}
-						case '¬':
-						{
-							character_length=4;
-							break;
-						}
-						case '/':
-						{
-							character_length=6;
-							break;
-						}
-						case '(':
-						{
-							character_length=4;
-							break;
-						}
-						case ')':
-						{
-							character_length=4;
-							break;
-						}
-						case '=':
-						{
-							character_length=4;
-							break;
-						}
-						case '\'':
-						{
-							character_length=2;
-							break;
-						}
-						case '-':
-						{
-							character_length=4;
-							break;
-						}
-						case '+':
-						{
-							character_length=4;
-							break;
-						}
-						case '*':
-						{
-							character_length=6;
-							break;
-						}
-						case '@':
-						{
-							character_length=8;
-							break;
-						}
-						case '>':
-						{
-							character_length=4;
-							break;
-						}
-						case '<':
-						{
-							character_length=4;
-							break;
-						}
-						case '[':
-						{
-							character_length=4;
-							break;
-						}
-						case ']':
-						{
-							character_length=4;
-							break;
-						}
-						case '{':
-						{
-							character_length=5;
-							break;
-						}
-						case '}':
-						{
-							character_length=5;
-							break;
-						}
-						case ',':
-						{
-							character_length=3;
-							break;
-						}
-						case ';':
-						{
-							character_length=3;
-							break;
-						}
-						case ':':
-						{
-							character_length=2;
-							break;
-						}
-						case '.':
-						{
-							character_length=2;
-							break;
-						}
-						case '_':
-						{
-							character_length=4;
-							break;
-						}
-						case 'º':
-						{
-							character_length=4;
-							break;
-						}
-						case 'ª':
-						{
-							character_length=5;
-							break;
-						}
-						case '\\':// \ is a special character,so it must be ignored
-						{
-							character_length=5;
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-	return character_length;
+    short character_length;
+    if(character>='A'&&character<='Z')
+    {
+        character_length=6;
+    }
+    else
+    {
+        if(character>='a'&&character<='z')
+        {
+            character_length=6;
+        }
+        else
+        {
+            if((character>='Ã¡'&&character<='Ãº') || character=='\x91' || character=='\xa1' || character=='\xa9' || character=='\xad' || character=='\xb3' || character=='\xba')
+            {
+                switch(character)
+                {
+                    case 'Ã‘':
+                    case '\x91':
+                    {
+                        character_length=7;
+                        break;
+                    }
+                    default:
+                    {
+                        character_length=6;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(character>='0'&&character<='9')
+                {
+                    character_length=6;
+                }
+                else
+                {
+                    //other characters
+                    switch(character)
+                    {
+                        case 'Ã‘':
+                        case '\x91':
+                        {
+                            character_length=7;
+                            break;
+                        }
+                        case 'Ã¼':
+                        case '\xbc':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case 0x20:
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case 'Â¡':
+                        case '\xa1':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '!':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '?':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case 'Â¿':
+                        case '\xbf':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '|':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '"':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case 'Â·':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '#':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '$':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '~':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '%':
+                        {
+                            character_length=9;
+                            break;
+                        }
+                        case 'â‚¬':
+                        case '\x82':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '&':
+                        {
+                            character_length=7;
+                            break;
+                        }
+                        case 'Â¬':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '/':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '(':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case ')':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '=':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '\'':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '-':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '+':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '*':
+                        {
+                            character_length=6;
+                            break;
+                        }
+                        case '@':
+                        {
+                            character_length=8;
+                            break;
+                        }
+                        case '>':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '<':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '[':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case ']':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case '{':
+                        {
+                            character_length=5;
+                            break;
+                        }
+                        case '}':
+                        {
+                            character_length=5;
+                            break;
+                        }
+                        case ',':
+                        {
+                            character_length=3;
+                            break;
+                        }
+                        case ';':
+                        {
+                            character_length=3;
+                            break;
+                        }
+                        case ':':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '.':
+                        {
+                            character_length=2;
+                            break;
+                        }
+                        case '_':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case 'Âº':
+                        {
+                            character_length=4;
+                            break;
+                        }
+                        case 'Âª':
+                        {
+                            character_length=5;
+                            break;
+                        }
+                        case '\\':// \ is a special character,so it must be ignored
+                        {
+                            character_length=5;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return character_length;
 }
 
 void modify_menu_element(char pos,unsigned char item[])

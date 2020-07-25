@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <string.h>
 
+
 #define SW1 0
 
 #define MIN_BRIGHT 5
@@ -44,13 +45,18 @@ void set_main_picture_menu(void);
 void manage_picture_menu(void);
 void set_paint_menu(void);
 void manage_paint_menu(void);
-
+void set_led_array_to_0(void);
 
 char menu=INIT_MENU;
 char backlight=BL_ON;
 char buzzer=BUZZER_OFF,subdir=0,max_menu_items=0;
 int8_t file_pos=-1;
-int bright=5,delay=5,current_position=1;
+int bright=5,delay=25,current_position=1;
+char go_back=0;
+int led_position=0;
+uint8_t color=-1, paint=0, painted = 0;
+int led_position_red=1, led_position_green=1, led_position_blue=1;
+char led_colors[144][3];
 int main(void)
 {
 	SysTick_Init();
@@ -77,7 +83,8 @@ int main(void)
 	}
 	else
 	{
-
+	    //Set all leds in array to 0
+	    set_led_array_to_0();
 		long next_cluster=get_root_dir_first_cluster();
 		screen_write("Initialising...",ALIGN_CENTRE_CENTRE);
 		do
@@ -92,7 +99,33 @@ int main(void)
 		show_menu(2);
 		while(1)
 		{
-			char keep_going=0;
+		    if(paint == 1 && painted == 0)
+		    {
+		        char c,c2,k;
+		        for(c=0;c<144;c++)
+		        {
+		            for(c2=0;c2<3;c2++)
+		            {
+		                for(k=0;k<8;k++)
+		                {
+		                    if(led_colors[c][c2] & (0x80 >> k))
+		                    {
+		                        send_bit(1);
+		                    }
+		                    else
+		                    {
+		                        send_bit(0);
+		                    }
+		                }
+		            }
+		        }
+		        painted = 1;
+		    }
+		    /*if(GPIO_PORTE_DATA_R&0x10)
+		    {
+		        increase_value();
+		    }*/
+			/*char keep_going=0;
 			while(keep_going==0)
 			{
 				char portB_data=GPIO_PORTB_DATA_R&0x33;
@@ -103,16 +136,7 @@ int main(void)
 					{
 						case 0x01: //PB0 (Change backlight status)
 						{
-							if(backlight==BL_ON)
-							{
-								disable_backlight(/*SSI0*/);
-								backlight=BL_OFF;
-							}
-							else
-							{
-								enable_backlight(/*SSI0*/);
-								backlight=BL_ON;
-							}
+
 						break;
 						}
 						case 0x02: //PB1 (Select element at current position)
@@ -174,13 +198,24 @@ int main(void)
 				show_menu(1);
 				current_position=1;
 				manage_paint_menu();
-			}
+			}*/
 		}
 		/*initialize_I2C();
 		initialize_accelerometer();
 		read_accelerometer_data();*/
 	}
 	return 0;
+}
+
+void set_led_array_to_0()
+{
+    int i=0;
+    for(i=0;i<144;i++)
+    {
+        led_colors[i][0] = 0x00;
+        led_colors[i][1] = 0x00;
+        led_colors[i][2] = 0x00;
+    }
 }
 
 void send_files_info()
@@ -233,7 +268,7 @@ void set_main_picture_menu()
 	strcat(cad," ms");
 	add_menu_element(cad);*/
 	add_menu_element("Bright: 5 %");
-	add_menu_element("Delay: 5 ms");
+	add_menu_element("Delay: 25 ms");
 	add_menu_element("Current file:");
 	add_menu_element("None");
 	add_menu_element("Buzzer: off");
@@ -254,8 +289,27 @@ void set_paint_menu()
 
 void set_color_menu()
 {
-	add_menu_element("Select led");
-	add_menu_element("LED: 1");
+	add_menu_element("Select LED");
+    char str[15];
+	switch(color)
+	{
+	    case RED:
+	    {
+	        sprintf(str, "LED (R): %d", led_position_red);
+	        break;
+	    }
+	    case GREEN:
+	    {
+	        sprintf(str, "LED (G): %d", led_position_green);
+	        break;
+	    }
+	    case BLUE:
+	    {
+	        sprintf(str, "LED (B): %d", led_position_blue);
+	        break;
+	    }
+	}
+	add_menu_element(str);
 	add_menu_element("Bright: 5 %");
 	add_menu_element("<- Back");
 	max_menu_items=4;
@@ -271,16 +325,855 @@ void set_color_brightness_menu()
 
 void initialize_buttons(void)
 {
-	volatile unsigned long delay;
-	SYSCTL_RCGC2_R |= 0x00000012;   		//  activate clock for Ports B and E
-	delay = SYSCTL_RCGC2_R;         		//  allow time for clock to stabilize
-	GPIO_PORTB_DIR_R &= ~0x33;             // make PB0,1,4 and 5 in
-	GPIO_PORTB_AFSEL_R &= ~0x33;           // disable alt funct on PA2,3,5
-	GPIO_PORTB_DEN_R |= 0x33;             // enable digital I/O on PB0,1,4 and 5
+    volatile unsigned long delay;
+    SYSCTL_RCGC2_R |= 0x00000012;           //  activate clock for Ports B and E
+    delay = SYSCTL_RCGC2_R;                 //  allow time for clock to stabilize
+    GPIO_PORTB_DIR_R &= ~0x33;             // make PB0,1,4 and 5 in
+    GPIO_PORTB_AFSEL_R &= ~0x33;           // disable alt funct on PA2,3,5
+    GPIO_PORTB_DEN_R |= 0x33;             // enable digital I/O on PB0,1,4 and 5
 
-	GPIO_PORTE_DIR_R &= ~0x32;             // make PE1,4 and 5 in
-	GPIO_PORTE_AFSEL_R &= ~0x32;           // disable alt funct on PE1,4 and 5
-	GPIO_PORTE_DEN_R |= 0x32;             // enable digital I/O on PE1,4 and 5
+    GPIO_PORTB_PCTL_R &= ~0x00FF00FF;    //Configure PB0, 1, 4 and 5 as GPIO
+    GPIO_PORTB_AMSEL_R &= ~0x33;           // disable alt funct on PB0,1,4 and 5
+    GPIO_PORTB_IS_R &= ~0x33;            //PB0,1,4 and 5 are edge sensitive
+    GPIO_PORTB_IBE_R &= ~0x33;            //Disable both edges for PB0,1,4 and 5
+    //GPIO_PORTB_IEV_R &= ~0x33;            //Detect falling edge in PB0,1,4 and 5
+    GPIO_PORTB_IEV_R |= 0x33;            //Detect rising edge in PB0,1,4 and 5
+    GPIO_PORTB_ICR_R = 0x33;              // ack, clear interrupt flags for PB0,1,4 and 5
+    GPIO_PORTB_IM_R |= 0x33;              // arm interrupt on PB0,1,4 and 5
+    NVIC_PRI0_R = (NVIC_PRI0_R&0xFFFF1FFF)|0x0000E000;         //Set priority bits for port B
+    NVIC_EN0_R |= 0x00000002;      // (h) enable interrupt 1 in NVIC (seen in IRQ). Interrupt one is bit 1
+
+
+    GPIO_PORTE_DIR_R &= ~0x32;             // make PE1,4 and 5 in
+    GPIO_PORTE_AFSEL_R &= ~0x32;           // disable alt funct on PE1,4 and 5
+    GPIO_PORTE_DEN_R |= 0x32;             // enable digital I/O on PE1,4 and 5
+
+
+    GPIO_PORTE_PCTL_R &= ~0x00FF00F0;    //Configure PE1,4 and 5 as GPIO
+    GPIO_PORTE_AMSEL_R &= ~0x32;           // disable alt funct on PE1, 4 and 5
+    GPIO_PORTE_IS_R &= ~0x32;            //PE1, 4 and 5 are edge sensitive
+    GPIO_PORTE_IBE_R &= ~0x32;            //Disable both edges for PE1, 4 and 5
+    //GPIO_PORTE_IEV_R &= ~0x32;            //Detect falling edge in PE1, 4 and 5
+    GPIO_PORTE_IEV_R |= 0x32;            //Detect rising edge in PE1, 4 and 5
+    GPIO_PORTE_ICR_R = 0x32;              // ack, clear interrupt flags for PE1, 4 and 5
+    GPIO_PORTE_IM_R |= 0x32;              // arm interrupt on PE1, PE4 and PE5
+    NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF1F)|0x000000E0;         //Set priority bits for port E
+    NVIC_EN0_R |= 0x00000010;      // (h) enable interrupt 1 in NVIC (seen in IRQ). Interrupt one is bit 4
+
+    IntMasterEnable();          //Enable global interrupts
+}
+
+void GPIOPortB_Handler(void)
+{
+    int led_position=0;
+    char c,c2,go_back=0,just_came=0;
+    //Check which pin caused the interrupt
+    //Backlight pin (PB0)
+    if(GPIO_PORTB_RIS_R&0x01)
+    {
+        GPIO_PORTB_ICR_R |= 0x01; // ack, clear interrupt flag0
+        if(backlight==BL_ON)
+        {
+            disable_backlight(/*SSI0*/);
+            backlight=BL_OFF;
+        }
+        else
+        {
+            enable_backlight(/*SSI0*/);
+            backlight=BL_ON;
+        }
+    }
+    else
+    {
+        //Minus/decrease pin (PB4)
+        if(GPIO_PORTB_RIS_R&0x10)
+        {
+            GPIO_PORTB_ICR_R |= 0x10; // ack, clear interrupt flag4
+            decrease_value();
+        }
+        else
+        {
+            //Select pin (PB1)
+            if(GPIO_PORTB_RIS_R&0x02)
+            {
+                GPIO_PORTB_ICR_R |= 0x02; // ack, clear interrupt flag1
+                switch(menu)
+                {
+                    case MAIN_MENU:
+                    {
+                        switch(current_position)
+                        {
+                            case 0:
+                            {
+                                delete_menu();
+                                clear_screen();
+                                set_init_menu();
+                                current_position=2;
+                                show_menu(2);
+                                menu=INIT_MENU;
+                                break;
+                            }
+                            case 4:
+                            {
+                                subdir++;
+                                backup_main_menu();
+                                //Change to file_menu
+                                delete_menu();
+                                clear_screen();
+                                char i;
+                                max_menu_items=0;
+                                for(i=0;i<12;i++)
+                                {
+                                    unsigned char name[25];
+                                    get_name(i,name);
+                                    if(name[0]!=0x00)
+                                    {
+                                        add_menu_element(name);
+                                        max_menu_items++;
+                                    }
+                                }
+                                menu=FILE_MENU;
+                                current_position=0;
+                                show_menu(0);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case FILE_MENU:
+                    {
+                        //Change to main menu, showing the name of the selected file
+                        //Is it a file?
+                        char type=is_file_or_dir(current_position);
+                        if(type == 2)
+                        {
+                            copy_menu();
+                            delete_menu();
+                            file_pos=current_position;
+                            clear_screen();
+                            subdir=0;
+                            restore_main_menu();
+                            unsigned char name[25];
+                            get_name(file_pos,name);
+                            modify_menu_element(4,name);
+                            menu=MAIN_MENU;
+                            current_position=4;
+                            reset_min_max();
+                            show_menu(4);
+                        }
+                        else
+                        {
+                            copy_menu();
+                            delete_menu();
+                            subdir++;
+                            long next_cluster=get_first_cluster(current_position);
+                            do
+                            {
+                                next_cluster=list_dirs_and_files(next_cluster,SHORT_NAME,NO_SUBDIRS,SD_SSI3);
+                            }while(next_cluster!=0x0FFFFFFF && next_cluster!=0xFFFFFFFF);
+                            char i;
+                            clear_screen();
+                            max_menu_items=0;
+                            for(i=0;i<12;i++)
+                            {
+                                unsigned char name[25];
+                                get_name(i,name);
+                                if(name[0]!=0x00)
+                                {
+                                    add_menu_element(name);
+                                    max_menu_items++;
+                                }
+                            }
+                            current_position=0;
+                            clear_screen();
+                            show_menu(0);
+                        }
+                        break;
+                    }
+                    case INIT_MENU:
+                    {
+                        switch(current_position)
+                        {
+                            case 2:
+                            {
+                                menu=PAINT_MENU;
+                                copy_menu();
+                                clear_screen();
+                                delete_menu();
+                                set_paint_menu();
+                                current_position=1;
+                                show_menu(1);
+                                break;
+                            }
+                            case 3:
+                            {
+                                menu=MAIN_MENU;
+                                copy_menu();
+                                delete_menu();
+                                clear_screen();
+                                set_main_picture_menu();
+                                current_position=1;
+                                show_menu(1);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case PAINT_MENU:
+                    {
+                        switch(current_position)
+                        {
+                            case 1:
+                            {
+                                color=RED;
+                                clear_screen();
+                                delete_menu();
+                                set_color_menu();
+                                show_menu(1);
+                                menu=COLOR_MENU;
+                                led_position=1;
+                                break;
+                            }
+                            case 2:
+                            {
+                                color=GREEN;
+                                clear_screen();
+                                delete_menu();
+                                set_color_menu();
+                                show_menu(1);
+                                current_position=1;
+                                menu=COLOR_MENU;
+                                led_position=1;
+                                break;
+                            }
+                            case 3:
+                            {
+                                color=BLUE;
+                                clear_screen();
+                                delete_menu();
+                                set_color_menu();
+                                show_menu(1);
+                                current_position=1;
+                                menu=COLOR_MENU;
+                                led_position=1;
+                                break;
+                            }
+                            case 4:
+                            {//random
+                                clear_ledarray();
+                                clear_screen();
+                                screen_write("Generating...",ALIGN_CENTRE_CENTRE);
+                                srand(time(NULL));
+                                for(c=0;c<144;c++)
+                                {
+                                    for(c2=0;c2<3;c2++)
+                                    {
+                                        led_colors[c][c2]=rand()%255;
+                                    }
+                                }
+                                clear_screen();
+                                set_paint_menu();
+                                show_menu(1);
+                                current_position=1;
+                                //menu=COLOR_MENU;
+                                break;
+                            }
+                            case 5:
+                            {//monochrome
+                                clear_ledarray();
+                                for(c=0;c<144;c++)
+                                {
+                                    for(c2=0;c2<3;c2++)
+                                    {
+                                        if(c%2==0)
+                                        {
+                                            led_colors[c][c2]=0;
+                                        }
+                                        else
+                                        {
+                                            led_colors[c][c2]=25;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            case 6:
+                            {
+                                clear_ledarray();
+                                for(c=0;c<144;c++)
+                                {
+                                    for(c2=0;c2<3;c2++)
+                                    {
+                                        led_colors[c][c2]=0;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case COLOR_MENU:
+                    {
+                        if(current_position==3)
+                        {
+                            delete_menu();
+                            menu=PAINT_MENU;
+                            clear_screen();
+                            set_paint_menu();
+                            show_menu(1);
+                            current_position=1;
+                        }
+                        else
+                        {
+                            if(current_position!=2)
+                            {
+                                int BrightLimit = map(get_brightness(),0,100,0,255);
+                                switch(color)
+                                {
+                                    case RED:
+                                    {
+                                        led_colors[led_position_red-1][0]=0;
+                                        led_colors[led_position_red-1][1]=map(255,0,255,0,BrightLimit);
+                                        led_colors[led_position_red-1][2]=0;
+                                        break;
+                                    }
+                                    case GREEN:
+                                    {
+                                        led_colors[led_position_green-1][0]=map(255,0,255,0,BrightLimit);
+                                        led_colors[led_position_green-1][1]=0;
+                                        led_colors[led_position_green-1][2]=0;
+                                        break;
+                                    }
+                                    case BLUE:
+                                    {
+                                        led_colors[led_position_blue-1][0]=0;
+                                        led_colors[led_position_blue-1][1]=0;
+                                        led_colors[led_position_blue-1][2]=map(255,0,255,0,BrightLimit);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                //Start pin (PB5)
+                if(GPIO_PORTB_RIS_R&0x20)
+                {
+                    GPIO_PORTB_ICR_R |= 0x20; // ack, clear interrupt flag5
+                    switch(menu)
+                    {
+                        case MAIN_MENU:
+                        {
+                            if(file_pos!=-1)
+                            {
+                                if(buzzer == BUZZER_ON)
+                                {
+                                    play_sound(1000);
+                                    SysTick_Wait50ms(40);
+                                    play_sound(0);
+                                }
+                                disable_backlight(SSI0);
+                                //backup_main_menu();
+                                //clear_screen();
+                                set_brightness(bright);
+                                set_delay(delay);
+                                long next_cluster=get_first_cluster(file_pos);
+                                do
+                                {
+                                    next_cluster=open_file(next_cluster,SD_SSI3);
+                                }while(next_cluster!=0x0FFFFFFF && next_cluster!=0xFFFFFFFF);
+                                //send_to_leds();
+                                //int i=0;
+                                clear_ledarray();
+                                //restore_main_menu();
+                                //show_menu(4);
+                                //current_position=4;
+                                enable_backlight(/*SSI0*/);
+                                if(buzzer == BUZZER_ON)
+                                {
+                                    GPIO_PORTB_DATA_R|=0x40;
+                                    SysTick_Wait50ms(40);
+                                    GPIO_PORTB_DATA_R&=~0x40;
+                                }
+                            }
+                            else
+                            {
+                                GPIO_PORTB_DATA_R|=0x40;
+                                SysTick_Wait50ms(20);
+                                GPIO_PORTB_DATA_R&=~0x40;
+                            }
+                            break;
+                        }
+                        case PAINT_MENU:
+                        {
+                            if(backlight==BL_ON)
+                            {
+                                disable_backlight(/*SSI0*/);
+                                backlight=BL_OFF;
+                            }
+                            else
+                            {
+                                enable_backlight(/*SSI0*/);
+                                backlight=BL_ON;
+                                SysTick_Wait50ms(20);
+                                disable_backlight(/*SSI0*/);
+                                backlight=BL_OFF;
+                            }
+                            clear_ledarray();
+                            paint = 1;
+                            painted = 0;
+                            menu=CURRENTLY_PAINTING;
+                            break;
+                        }
+                        case CURRENTLY_PAINTING:
+                        {
+                            menu=PAINT_MENU;
+                            clear_ledarray();
+                            enable_backlight();
+                            paint = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    SysTick_Wait50ms(2);
+}
+
+void decrease_value()
+{
+    char led_colors[144][3];
+    int led_position=0;
+    char c,c2,go_back=0,just_came=0,lights=LIGHTS_OFF;
+    switch(menu)
+    {
+        case MAIN_MENU:
+        {
+            switch(current_position)
+            {
+                case 0:
+                {
+                    clear_screen();
+                    delete_menu();
+                    set_init_menu();
+                    menu=INIT_MENU;
+                    show_menu(2);
+                    current_position=2;
+                //go_back=1;
+                    break;
+                }
+                case 1:
+                {
+                    if(bright > MIN_BRIGHT)
+                    {
+                        bright=bright-5;
+                        char str[15];
+                        sprintf(str, "Bright: %d %%", bright);
+                        clear_screen();
+                        modify_menu_element(current_position,str);
+                        show_menu(current_position);
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if(delay > MIN_DELAY)
+                    {
+                        delay=delay-5;
+                        char str[15];
+                        sprintf(str, "Delay: %d ms", delay);
+                        clear_screen();
+                        modify_menu_element(current_position,str);
+                        show_menu(current_position);
+                    }
+                    break;
+                }
+                case 5:
+                {
+                    if(buzzer == BUZZER_ON)
+                    {
+                        clear_screen();
+                        modify_menu_element(5,"Buzzer: off");
+                        show_menu(current_position);
+                        buzzer = BUZZER_OFF;
+                    }
+                    else
+                    {
+                        clear_screen();
+                        modify_menu_element(5,"Buzzer: on");
+                        show_menu(current_position);
+                        buzzer = BUZZER_ON;
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case FILE_MENU:
+        {
+            subdir--;
+            clear_screen();
+            if(subdir>0)
+            {
+                restore_previous_menu();
+            }
+            else
+            {
+                restore_main_menu();
+            }
+            show_menu(0);
+            menu=MAIN_MENU;
+            break;
+        }
+        case PAINT_MENU:
+        {
+            delete_menu();
+            menu=INIT_MENU;
+            clear_screen();
+            set_init_menu();
+            show_menu(2);
+            current_position=2;
+            go_back=1;
+            break;
+        }
+        case COLOR_MENU:
+        {
+            switch(current_position)
+            {
+                case 1:
+                {
+                    char str[15];
+                    switch(color)
+                    {
+                        case RED:
+                        {
+                            if(led_position_red > 1)
+                            {
+                                led_position_red--;
+                                sprintf(str, "LED (R): %d", led_position_red);
+                            }
+                            break;
+                        }
+                        case GREEN:
+                        {
+                            if(led_position_green > 1)
+                            {
+                                led_position_green--;
+                                sprintf(str, "LED (G): %d", led_position_green);
+                            }
+                            break;
+                        }
+                        case BLUE:
+                        {
+                            if(led_position_blue > 1)
+                            {
+                                led_position_blue--;
+                                sprintf(str, "LED (B): %d", led_position_blue);
+                            }
+                            break;
+                        }
+                    }
+                    //led_position--;
+                    clear_screen();
+                    modify_menu_element(1,str);
+                    show_menu(1);
+                    break;
+                }
+                case 2:
+                {
+                    if(bright>MIN_BRIGHT)
+                    {
+                        bright=bright-5;
+                        set_brightness(bright);
+                        char str[15];
+                        sprintf(str, "Bright: %d %%", bright);
+                        clear_screen();
+                        modify_menu_element(2,str);
+                        show_menu(2);
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    delete_menu();
+                    menu=PAINT_MENU;
+                    clear_screen();
+                    set_paint_menu();
+                    show_menu(1);
+                    current_position=1;
+                    break;
+                }
+            }
+            /*switch(current_position)
+            {
+                case 1:
+                {
+
+                    if(led_position>1)
+                    {
+                        led_position--;
+                        char str[15];
+                        sprintf(str, "LED: %d", led_position);
+                        clear_screen();
+                        modify_menu_element(1,str);
+                        show_menu(1);
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if(bright>5)
+                    {
+                        bright=bright-5;
+                        set_brightness(bright);
+                        char str[15];
+                        sprintf(str, "Bright: %d %%", bright);
+                        clear_screen();
+                        modify_menu_element(2,str);
+                        show_menu(2);
+                    }
+                    break;
+                }
+
+            }*/
+            break;
+        }
+        case CURRENTLY_PAINTING:
+        {
+            delete_menu();
+            menu=COLOR_MENU;
+            clear_screen();
+            set_color_menu();
+            show_menu(1);
+            break;
+        }
+    }
+}
+
+void GPIOPortE_Handler(void)
+{
+    char led_colors[144][3];
+    int led_position=0;
+    char c,c2,go_back=0,just_came=0,lights=LIGHTS_OFF;
+    //check which pin caused the interrupt
+    //Move down pin (PE1)
+    if(GPIO_PORTE_RIS_R&0x02)
+    {
+        GPIO_PORTE_ICR_R |= 0x02; // ack, clear interrupt flag1
+        move_lower();
+    }
+    else
+    {
+        //More/Increase pin (PE4)
+        if(GPIO_PORTE_RIS_R&0x10)
+        {
+            GPIO_PORTE_ICR_R |= 0x10; // ack, clear interrupt flag4
+            increase_value();
+        }
+        else
+        {
+            //Move up pin (PE5)
+            if(GPIO_PORTE_RIS_R&0x20)
+            {
+                GPIO_PORTE_ICR_R |= 0x20; // ack, clear interrupt flag5
+                move_upper();
+            }
+        }
+    }
+    SysTick_Wait50ms(2);
+}
+
+/* Move lower*/
+void move_lower()
+{
+    if(menu==MAIN_MENU && current_position==2)
+    {
+        current_position=4;
+    }
+    else
+    {
+        if(current_position<11 && current_position<(max_menu_items-1))
+        {
+            current_position++;
+        }
+    }
+    clear_screen();
+    show_menu(current_position);
+}
+
+
+/* Move cursor to the upper element */
+void move_upper()
+{
+    if(current_position>0)
+    {
+        switch(menu)
+        {
+            case MAIN_MENU:
+            {
+                if(current_position == 4)
+                {
+                    current_position=2;
+                }
+                else
+                {
+                    current_position--;
+                }
+                break;
+            }
+            case INIT_MENU:
+            {
+                if(current_position > 2)
+                {
+                    current_position--;
+                }
+                break;
+            }
+            case PAINT_MENU:
+            case COLOR_MENU:
+            {
+                if(current_position > 1)
+                {
+                    current_position--;
+                }
+                break;
+            }
+        }
+        /*if(menu==MAIN_MENU && current_position==4)
+        {
+            current_position=2;
+        }
+        else
+        {
+            if(menu!=MAIN_MENU || (menu==MAIN_MENU && current_position>0))
+            {
+                current_position--;
+            }
+        }*/
+    }
+    clear_screen();
+    show_menu(current_position);
+}
+
+/* Increase value (brightness, delay, led number...) */
+void increase_value()
+{
+    char led_colors[144][3];
+    //char c,c2,go_back=0,just_came=0,lights=LIGHTS_OFF;
+    switch(menu)
+    {
+        case MAIN_MENU:
+        {
+            if(current_position == 1 && bright < MAX_BRIGHT)
+            {
+                bright=bright+5;
+                char str[15];
+                sprintf(str, "Bright: %d %%", bright);
+                clear_screen();
+                modify_menu_element(1,str);
+                show_menu(1);
+            }
+            else
+            {
+                if(current_position == 2 && delay < MAX_DELAY)
+                {
+                    delay=delay+5;
+                    char str[15];
+                    sprintf(str, "Delay: %d ms", delay);
+                    clear_screen();
+                    modify_menu_element(2,str);
+                    show_menu(2);
+                    show_menu(current_position);
+                }
+                else
+                {
+                    if(current_position == 5)
+                    {
+                        if(buzzer == BUZZER_ON)
+                        {
+                            clear_screen();
+                            modify_menu_element(5,"Buzzer: off");
+                            show_menu(current_position);
+                            buzzer = BUZZER_OFF;
+                        }
+                        else
+                        {
+                            clear_screen();
+                            modify_menu_element(5,"Buzzer: on");
+                            show_menu(current_position);
+                            buzzer = BUZZER_ON;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case COLOR_MENU:
+        {
+            switch(current_position)
+            {
+                case 1:
+                {
+                    char str[15];
+                    switch(color)
+                    {
+                        case RED:
+                        {
+                            if(led_position_red < 144)
+                            {
+                                led_position_red++;
+                                sprintf(str, "LED (R): %d", led_position_red);
+                            }
+                            break;
+                        }
+                        case GREEN:
+                        {
+                            if(led_position_green < 144)
+                            {
+                                led_position_green++;
+                                sprintf(str, "LED (G): %d", led_position_green);
+                            }
+                            break;
+                        }
+                        case BLUE:
+                        {
+                            if(led_position_blue < 144)
+                            {
+                                led_position_blue++;
+                                sprintf(str, "LED (B): %d", led_position_blue);
+                            }
+                            break;
+                        }
+                    }
+                    //led_position++;
+                    clear_screen();
+                    modify_menu_element(1,str);
+                    show_menu(1);
+                    break;
+                }
+                case 2:
+                {
+                    if(bright<MAX_BRIGHT)
+                    {
+                        bright=bright+5;
+                        set_brightness(bright);
+                        char str[15];
+                        sprintf(str, "Bright: %d %%", bright);
+                        clear_screen();
+                        modify_menu_element(2,str);
+                        show_menu(2);
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
 }
 
 /*
@@ -397,777 +1290,6 @@ void init_buzzer(uint16_t period, uint16_t high)
 uint8_t map(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-void GPIOPortB_Handler(void){
-//GPIO_RIS
-  GPIO_PORTB_ICR_R |= 0x10; // ack, clear interrupt flag4
-
-  // stuff
-
-}
-
-void manage_picture_menu()
-{
-	char go_back=0;
-	while(go_back==0)
-	{
-		// PE5 (SW6) - Up
-		// PE1 (SW3) - Down
-		// PE4 (SW2) - Increase
-		// PB4 (SW4) - Decrease
-		// PB1 (SW1) - Select
-		// PB0 (SW0) - Backlight on/off
-		// PB5 (SW5) - Start
-		//Check which button is selected
-		char portB_data=GPIO_PORTB_DATA_R&0x33;
-		char portE_data=GPIO_PORTE_DATA_R&0x32;
-		if(portB_data > 0x00)
-		{
-			switch(portB_data)
-			{
-				case 0x01: //PB0 (Change backlight status)
-				{
-					if(backlight==BL_ON)
-					{
-						disable_backlight();
-						backlight=BL_OFF;
-					}
-					else
-					{
-						enable_backlight();
-						backlight=BL_ON;
-					}
-					break;
-				}
-				case 0x02: //PB1 (Select element at current position)
-				{
-					if(menu == MAIN_MENU && current_position == 4)
-					{
-						subdir++;
-						backup_main_menu();
-						//Change to file_menu
-						delete_menu();
-						clear_screen();
-						char i;
-						max_menu_items=0;
-						for(i=0;i<12;i++)
-						{
-							unsigned char name[25];
-							get_name(i,name);
-							if(name[0]!=0x00)
-							{
-								add_menu_element(name);
-								max_menu_items++;
-							}
-						}
-						menu=FILE_MENU;
-						current_position=0;
-						show_menu(0);
-					}
-					else
-					{
-						if(menu == MAIN_MENU && current_position == 0)
-						{
-							delete_menu();
-							clear_screen();
-							set_init_menu();
-							current_position=2;
-							show_menu(2);
-							menu=INIT_MENU;
-						}
-						else
-						{
-							if(menu == FILE_MENU)
-							{
-								//Change to main menu, showing the name of the selected file
-								//Is it a file?
-								char type=is_file_or_dir(current_position);
-								if(type == 2)
-								{
-									copy_menu();
-									delete_menu();
-									file_pos=current_position;
-									clear_screen();
-									subdir=0;
-									restore_main_menu();
-									unsigned char name[25];
-									get_name(file_pos,name);
-									modify_menu_element(4,name);
-									menu=MAIN_MENU;
-									current_position=4;
-									reset_min_max();
-									show_menu(4);
-								}
-								else
-								{
-									copy_menu();
-									delete_menu();
-									subdir++;
-									long next_cluster=get_first_cluster(current_position);
-									do
-									{
-										next_cluster=list_dirs_and_files(next_cluster,SHORT_NAME,NO_SUBDIRS,SD_SSI3);
-									}while(next_cluster!=0x0FFFFFFF && next_cluster!=0xFFFFFFFF);
-									char i;
-									clear_screen();
-									max_menu_items=0;
-									for(i=0;i<12;i++)
-									{
-										unsigned char name[25];
-										get_name(i,name);
-										if(name[0]!=0x00)
-										{
-											add_menu_element(name);
-											max_menu_items++;
-										}
-									}
-									current_position=0;
-									clear_screen();
-									show_menu(0);
-								}
-							}
-						}
-					}
-					break;
-				}
-				case 0x10: //PB4 (Decrease current value)
-				{
-					if(menu == MAIN_MENU && (current_position == 1 || current_position == 2 || current_position == 5))
-					{
-						if(current_position == 1 && bright > MIN_BRIGHT && bright <=MAX_BRIGHT)
-						{
-							bright=bright-5;
-							char str[]="Bright: ";
-							convert_value_to_string(str, bright);
-							strcat(str," %");
-							clear_screen();
-							modify_menu_element(current_position,str);
-							show_menu(current_position);
-						}
-						else
-						{
-							if(current_position == 2 && delay > MIN_DELAY && delay <= MAX_DELAY)
-							{
-								delay=delay-5;
-								char str[]="Delay: ";
-								convert_value_to_string(str, delay);
-								strcat(str," ms");
-								clear_screen();
-								modify_menu_element(current_position,str);
-								show_menu(current_position);
-							}
-							else
-							{
-								if(current_position == 5)
-								{
-									if(buzzer == BUZZER_ON)
-									{
-										clear_screen();
-										modify_menu_element(5,"Buzzer: off");
-										show_menu(current_position);
-										buzzer = BUZZER_OFF;
-									}
-									else
-									{
-										clear_screen();
-										modify_menu_element(5,"Buzzer: on");
-										show_menu(current_position);
-										buzzer = BUZZER_ON;
-									}
-								}
-							}
-						}
-					}
-					else
-					{
-						if(menu == FILE_MENU)
-						{
-							subdir--;
-							clear_screen();
-							if(subdir>0)
-							{
-								restore_previous_menu();
-							}
-							else
-							{
-								restore_main_menu();
-							}
-							show_menu(0);
-							menu=MAIN_MENU;
-						}
-						if(menu == MAIN_MENU)
-						{
-							clear_screen();
-							delete_menu();
-							set_init_menu();
-							menu=INIT_MENU;
-							show_menu(2);
-							current_position=2;
-							go_back=1;
-						}
-					}
-					//clear_ledarray();
-					break;
-				}
-				case 0x20: //PB5 (Open file and send data to the LEDs)
-				{
-					if(file_pos!=-1)
-					{
-						if(buzzer == BUZZER_ON)
-						{
-							play_sound(1000);
-							SysTick_Wait50ms(40);
-							play_sound(0);
-						}
-						disable_backlight(SSI0);
-						clear_screen();
-						set_brightness(bright);
-						set_delay(delay);
-						long next_cluster=get_first_cluster(file_pos);
-						do
-						{
-							next_cluster=open_file(next_cluster,SD_SSI3);
-						}while(next_cluster!=0x0FFFFFFF && next_cluster!=0xFFFFFFFF);
-						//send_to_leds();
-						//int i=0;
-						clear_ledarray();
-						show_menu(4);
-						current_position=4;
-						enable_backlight(/*SSI0*/);
-						if(buzzer == BUZZER_ON)
-						{
-							GPIO_PORTB_DATA_R|=0x40;
-							SysTick_Wait50ms(40);
-							GPIO_PORTB_DATA_R&=~0x40;
-						}
-					}
-					else
-					{
-						GPIO_PORTB_DATA_R|=0x40;
-						SysTick_Wait50ms(20);
-						GPIO_PORTB_DATA_R&=~0x40;
-					}
-					break;
-				}
-			}
-		}
-		else
-		{
-			if(portE_data > 0x00)
-			{
-				//PE1 (down), PE4 (increase) and PE5 (up)
-				switch(portE_data)
-				{
-					case 0x02: // PE1 (down)
-					{
-						if(menu==MAIN_MENU && current_position==2)
-						{
-							current_position=4;
-						}
-						else
-						{
-							if(current_position<11 && current_position<(max_menu_items-1))
-							{
-								current_position++;
-							}
-						}
-						clear_screen();
-						show_menu(current_position);
-						break;
-					}
-					case 0x10: // PE4 (increase value)
-					{
-						if(menu == MAIN_MENU && (current_position == 1 || current_position == 2 || current_position == 5))
-						{
-							if(current_position == 1 && bright >= MIN_BRIGHT && bright < MAX_BRIGHT)
-							{
-								bright=bright+5;
-								char str[]="Bright: ";
-								convert_value_to_string(str, bright);
-								strcat(str," %");
-								clear_screen();
-								modify_menu_element(1,str);
-								show_menu(1);
-							}
-							else
-							{
-								if(current_position == 2 && delay >= MIN_DELAY && delay < MAX_DELAY)
-								{
-									delay=delay+5;
-									char str[]="Delay: ";
-									convert_value_to_string(str, delay);
-									strcat(str," ms");
-									clear_screen();
-									modify_menu_element(2,str);
-									show_menu(2);
-									show_menu(current_position);
-								}
-								else
-								{
-									if(current_position == 5)
-									{
-										if(buzzer == BUZZER_ON)
-										{
-											clear_screen();
-											modify_menu_element(5,"Buzzer: off");
-											show_menu(current_position);
-											buzzer = BUZZER_OFF;
-										}
-										else
-										{
-											clear_screen();
-											modify_menu_element(5,"Buzzer: on");
-											show_menu(current_position);
-											buzzer = BUZZER_ON;
-										}
-									}
-								}
-							}
-						}
-						break;
-					}
-					case 0x20: // PE5 (up)
-					{
-						if(current_position>0)
-						{
-							if(menu==MAIN_MENU && current_position==4)
-							{
-								current_position=2;
-							}
-							else
-							{
-								if(menu!=MAIN_MENU || (menu==MAIN_MENU && current_position>0))
-								{
-									current_position--;
-								}
-							}
-						}
-						clear_screen();
-						show_menu(current_position);
-						break;
-					}
-				}
-			}
-		}
-		SysTick_Wait50ms(10);
-	}
-}
-
-void manage_paint_menu()
-{
-	char led_colors[144][3];
-	int led_position=0;
-	char c,c2,color=-1,go_back=0,just_came=0,lights=LIGHTS_OFF;
-	while(GPIO_PORTB_DATA_R==0x02);
-	clear_ledarray();
-	set_brightness(5);
-	current_position=1;
-	for(c=0;c<144;c++)
-	{
-		for(c2=0;c2<3;c2++)
-		{
-			led_colors[c][c2]=0;
-		}
-	}
-	while(go_back==0)
-	{
-		// PE5 (SW6) - Up
-		// PE1 (SW3) - Down
-		// PE4 (SW2) - Increase
-		// PB4 (SW4) - Decrease
-		// PB1 (SW1) - Select
-		// PB0 (SW0) - Backlight on/off
-		// PB5 (SW5) - Start
-		//Check which button is selected
-		char portB_data=GPIO_PORTB_DATA_R&0x33;
-		char portE_data=GPIO_PORTE_DATA_R&0x32;
-		if(portB_data > 0x00)
-		{
-			switch(portB_data)
-			{
-				case 0x01: //PB0 (Change backlight status)
-				{
-					if(backlight==BL_ON)
-					{
-						disable_backlight(/*SSI0*/);
-						backlight=BL_OFF;
-					}
-					else
-					{
-						enable_backlight(/*SSI0*/);
-						backlight=BL_ON;
-					}
-					break;
-				}
-				case 0x02: //PB1 (Select element at current position)
-				{
-					if(menu==PAINT_MENU)
-					{
-						/*if(color!=-1)
-						{
-							delete_menu();
-							set_color_menu();
-							show_menu(1);
-							menu=COLOR_MENU;
-						}*/
-						switch(current_position)
-						{
-							case 1:
-							{
-								color=RED;
-								clear_screen();
-								delete_menu();
-								set_color_menu();
-								show_menu(1);
-								menu=COLOR_MENU;
-								led_position=1;
-								break;
-							}
-							case 2:
-							{
-								color=GREEN;
-								clear_screen();
-								delete_menu();
-								set_color_menu();
-								show_menu(1);
-								current_position=1;
-								menu=COLOR_MENU;
-								led_position=1;
-								break;
-							}
-							case 3:
-							{
-								color=BLUE;
-								clear_screen();
-								delete_menu();
-								set_color_menu();
-								show_menu(1);
-								current_position=1;
-								menu=COLOR_MENU;
-								led_position=1;
-								break;
-							}
-							case 4:
-							{//random
-								clear_ledarray();
-								clear_screen();
-								screen_write("Generating...",ALIGN_CENTRE_CENTRE);
-								srand(time(NULL));
-								for(c=0;c<144;c++)
-								{
-									for(c2=0;c2<3;c2++)
-									{
-										led_colors[c][c2]=rand()%255;
-									}
-								}
-								clear_screen();
-								set_paint_menu();
-								show_menu(1);
-								current_position=1;
-								//menu=COLOR_MENU;
-								break;
-							}
-							case 5:
-							{//monochrome
-								clear_ledarray();
-								for(c=0;c<144;c++)
-								{
-									for(c2=0;c2<3;c2++)
-									{
-										if(c%2==0)
-										{
-											led_colors[c][c2]=0;
-										}
-										else
-										{
-											led_colors[c][c2]=25;
-										}
-									}
-								}
-								break;
-							}
-							case 6:
-							{
-								clear_ledarray();
-								for(c=0;c<144;c++)
-								{
-									for(c2=0;c2<3;c2++)
-									{
-										led_colors[c][c2]=0;
-									}
-								}
-								break;
-							}
-						}
-					}
-					else
-					{
-						if(menu==COLOR_MENU && current_position!=2)
-						{
-							int BrightLimit = map(get_brightness(),0,100,0,255);
-							switch(color)
-							{
-								case RED:
-								{
-									led_colors[led_position-1][0]=0;
-									led_colors[led_position-1][1]=map(255,0,255,0,BrightLimit);
-									led_colors[led_position-1][2]=0;
-									break;
-								}
-								case GREEN:
-								{
-									led_colors[led_position-1][0]=map(255,0,255,0,BrightLimit);
-									led_colors[led_position-1][1]=0;
-									led_colors[led_position-1][2]=0;
-									break;
-								}
-								case BLUE:
-								{
-									led_colors[led_position-1][0]=0;
-									led_colors[led_position-1][1]=0;
-									led_colors[led_position-1][2]=map(255,0,255,0,BrightLimit);
-									break;
-								}
-								/*case RESET_COLORS:
-								{
-									clear_ledarray();
-									break;
-								}*/
-							}
-						}
-						else
-						{
-							if(menu == COLOR_MENU && current_position==3)
-							{
-								delete_menu();
-								menu=PAINT_MENU;
-								clear_screen();
-								set_paint_menu();
-								show_menu(1);
-								current_position=1;
-							}
-						}
-					}
-					break;
-				}
-				case 0x10: //PB4 (Decrease current value / back)
-				{
-					if(menu == COLOR_MENU && current_position==1 && led_position>1)
-					{
-						led_position--;
-						char str[]="LED: ";
-						convert_value_to_string(str, led_position);
-						clear_screen();
-						modify_menu_element(1,str);
-						show_menu(1);
-					}
-					else
-					{
-						if(menu == COLOR_MENU && current_position==2 && bright>5)
-						{
-							bright=bright-5;
-							set_brightness(bright);
-							char str[]="Bright: ";
-							convert_value_to_string(str, bright);
-							strcat(str," %");
-							clear_screen();
-							modify_menu_element(2,str);
-							show_menu(2);
-						}
-						else
-						{
-							if(menu==CURRENTLY_PAINTING)
-							{
-								//go_back=1;
-								delete_menu();
-								menu=COLOR_MENU;
-								clear_screen();
-								set_color_menu();
-								show_menu(1);
-							}
-							else
-							{
-								if(menu == COLOR_MENU && current_position==3)
-								{
-									delete_menu();
-									menu=PAINT_MENU;
-									clear_screen();
-									set_paint_menu();
-									show_menu(1);
-									current_position=1;
-								}
-								else
-								{
-									if(menu==PAINT_MENU)
-									{
-										delete_menu();
-										menu=INIT_MENU;
-										clear_screen();
-										set_init_menu();
-										show_menu(2);
-										current_position=2;
-										go_back=1;
-									}
-								}
-							}
-						}
-					}
-					break;
-				}
-				case 0x20: //PB5 (Send data to the LEDs)
-				{
-					if(backlight==BL_ON)
-					{
-						disable_backlight(/*SSI0*/);
-						backlight=BL_OFF;
-					}
-					else
-					{
-						enable_backlight(/*SSI0*/);
-						backlight=BL_ON;
-					}
-					if(lights==LIGHTS_ON)
-					{
-						clear_ledarray();
-						lights=LIGHTS_OFF;
-					}
-					else
-					{
-						char k;
-						for(c=0;c<144;c++)
-						{
-							for(c2=0;c2<3;c2++)
-							{
-								for(k=0;k<8;k++)
-								{
-									if(led_colors[c][c2] & (0x80 >> k))
-									{
-										send_bit(1);
-									}
-									else
-									{
-										send_bit(0);
-									}
-								}
-							}
-						}
-						lights=LIGHTS_ON;
-						//menu=CURRENTLY_PAINTING;
-					}
-					break;
-				}
-			}
-		}
-		else
-		{
-			if(portE_data > 0x00)
-			{
-				//PE1 (down), PE4 (increase) and PE5 (up)
-				switch(portE_data)
-				{
-					case 0x02: // PE1 (down)
-					{
-						if(menu==PAINT_MENU && current_position<6)
-						{
-							current_position++;
-						}
-						else
-						{
-							if(menu==COLOR_MENU && current_position<3)
-							{
-								current_position++;
-							}
-						}
-						clear_screen();
-						show_menu(current_position);
-						break;
-					}
-					case 0x10: // PE4 (increase value)
-					{
-						if(menu == COLOR_MENU && current_position==1 && led_position<144)
-						{
-							led_position++;
-							char str[]="LED: ";
-							convert_value_to_string(str,led_position);
-							clear_screen();
-							modify_menu_element(1,str);
-							show_menu(1);
-						}
-						else
-						{
-							if(menu == COLOR_MENU && current_position==2 && bright<100)
-							{
-								bright=bright+5;
-								set_brightness(bright);
-								char str[]="Bright: ";
-								convert_value_to_string(str, bright);
-								strcat(str," %");
-								clear_screen();
-								modify_menu_element(2,str);
-								show_menu(2);
-							}
-						}
-
-						break;
-					}
-					case 0x20: // PE5 (up)
-					{
-						if(menu==PAINT_MENU && current_position>1)
-						{
-							current_position--;
-						}
-						else
-						{
-							if(menu==COLOR_MENU && current_position>1)
-							{
-								current_position--;
-							}
-						}
-						clear_screen();
-						show_menu(current_position);
-						break;
-					}
-				}
-			}
-		}
-		SysTick_Wait50ms(10);
-	}
-	go_back=0;
-}
-
-void convert_value_to_string(char str[], int value)
-{
-	if(value<10)
-	{
-		char str1[2];
-		str1[0]=value+'0';
-		str1[1]='\0';
-		strcat(str,str1);
-	}
-	else
-	{
-		if(value>=10 && value <=99)
-		{
-			char str2[3];
-			int value2=value/10;
-			str2[0]=value2+'0';
-			str2[1]=(value%10)+'0';
-			str2[2]='\0';
-			strcat(str,str2);
-		}
-		else
-		{
-			char str3[4];
-			int value2=value;
-			str3[0]=(value2/100)+'0';
-			str3[1]=((value2/10)-((value2/100)*10))+'0';
-			int value3=value%10;
-			str3[2]=(value%10)+'0';
-			str3[3]='\0';
-			strcat(str,str3);
-		}
-	}
 }
 
 /*Play a sound in the SMD buzzer*/

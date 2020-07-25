@@ -9,7 +9,7 @@
 #include "1wire.h"
 #include <stdint.h>
 
-char lightwand_brightness;
+char lightwand_brightness=5;
 unsigned long lightwand_delay;
 
 void init_1wire_pin()
