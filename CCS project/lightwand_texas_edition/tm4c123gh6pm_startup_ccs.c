@@ -33,8 +33,6 @@ void ResetISR(void);
 static void NmiSR(void);
 static void FaultISR(void);
 static void IntDefaultHandler(void);
-static void GPIOPortB_Handler(void);
-static void GPIOPortE_Handler(void);
 
 //*****************************************************************************
 //
@@ -57,6 +55,8 @@ extern uint32_t __STACK_TOP;
 //
 //*****************************************************************************
 // To be added by user
+static void GPIOPortB_Handler(void);
+static void GPIOPortE_Handler(void);
 
 //*****************************************************************************
 //

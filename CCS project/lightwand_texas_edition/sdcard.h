@@ -2,16 +2,16 @@
  * sdcard.h
  *
  *  Created on: 15/09/2016
- *  Author: Javier Martínez Arrieta
+ *  Author: Javier Martï¿½nez Arrieta
  *  Version: 1.0
  *  This is part of the sdcard library, with functions that will allow you to read and (in the future) write in an SD card formatted using FAT32 (single partition).
  */
 
- /*  Copyright (C) 2016 Javier Martínez Arrieta
+ /*  Copyright (C) 2016 Javier Martï¿½nez Arrieta
  *
  *  This project is licensed under Creative Commons Attribution-Non Commercial-Share Alike 4.0 International (CC BY-NC-SA 4.0). According to this license you are free to:
- *  Share — copy and redistribute the material in any medium or format.
- *  Adapt — remix, transform, and build upon the material.
+ *  Share ï¿½ copy and redistribute the material in any medium or format.
+ *  Adapt ï¿½ remix, transform, and build upon the material.
  *  The licensor cannot revoke these freedoms as long as you follow the license terms.
  *	Complete information about this license can be found at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
  *
@@ -73,7 +73,7 @@ void change_speed();
 long open_file(long next_cluster,enum SSI);
 long get_root_dir_first_cluster(void);
 long get_first_cluster(int pos);
-long list_dirs_and_files(long next_cluster,enum name_type name, enum get_subdirs subdirs, enum SSI SSI_number);
+long get_files_and_dirs(long next_cluster,enum name_type name, enum get_subdirs subdirs, enum SSI SSI_number);
 void tx_SSI(/*enum SSI*/);
 void clean_name(void);
 void disk_timerproc(void);

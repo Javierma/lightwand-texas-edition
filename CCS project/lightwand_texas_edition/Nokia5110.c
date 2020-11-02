@@ -1911,12 +1911,17 @@ void restore_previous_menu(void)
 
 void add_menu_element(unsigned char item[])
 {
-	char i=0;
-	for(i=0;i<25;i++)
-	{
-		menu_items[item_num][i]=item[i];
-	}
-	item_num++;
+    uint8_t line_length = 0;
+    char i=0;
+    for(i=0;i<25;i++)
+    {
+        line_length = line_length + get_character_length(item[i]);
+        if(line_length < 84)
+        {
+            menu_items[item_num][i]=item[i];
+        }
+    }
+    item_num++;
 }
 
 /*

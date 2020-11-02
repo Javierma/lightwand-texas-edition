@@ -15,6 +15,7 @@
 #endif /* 1WIRE_H_ */
 
 #define NUM_LEDS 144
+//#define NUM_LEDS 60
 
 void send_bit(char bit);
 void init_1wire_pin(void);

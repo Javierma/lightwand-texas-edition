@@ -89,9 +89,9 @@ int main(void)
 		screen_write("Initialising...",ALIGN_CENTRE_CENTRE);
 		do
 		{
-			next_cluster=list_dirs_and_files(next_cluster,SHORT_NAME,GET_SUBDIRS,SD_SSI3);
+			next_cluster=get_files_and_dirs(next_cluster,LONG_NAME,GET_SUBDIRS,SD_SSI3);
 		}while(next_cluster!=0x0FFFFFFF && next_cluster!=0xFFFFFFFF);
-		filter_by_extension("PNM",1);
+		filter_by_extension("pnm",1);
 		clear_screen();
 		set_init_menu();
 		initialize_buttons();
